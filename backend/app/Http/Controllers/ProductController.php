@@ -16,6 +16,7 @@ class ProductController extends Controller
         return response()->json($products);
     }
 
+    // Retorna apenas o nome e o estoque dos produtos
     public function stock()
     {
         $products = Products::select('name', 'qty_stock')->get();

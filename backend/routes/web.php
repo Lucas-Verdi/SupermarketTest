@@ -5,18 +5,14 @@ use App\Http\Controllers\OrderController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\CustomerController;
 
-// Rotas de pedidos
-Route::get('/orders', [OrderController::class, 'index']); // listar pedidos
-Route::post('/orders', [OrderController::class, 'store']); // criar pedido
-Route::get('/orders/{id}', [OrderController::class, 'show']); // visualizar pedido
-Route::put('/orders/{id}', [OrderController::class, 'update']); // atualizar pedido
-Route::delete('/orders/{id}', [OrderController::class, 'destroy']); // deletar pedido
+// Rota para registrar um novo pedido
+Route::post('/orders', [OrderController::class, 'store']);
 
-// Rota para consultar estoque atual
+// Rota para consultar estoque atual dos produtos
 Route::get('/products/stock', [ProductController::class, 'stock']);
 
-// Rota para listar todos os produtos
+// Rota para listar todos os produtos disponíveis
 Route::get('/products', [ProductController::class, 'index']);
 
-// Rota para encontrar ou criar um cliente
+// Rota para encontrar ou criar um cliente pelo nome
 Route::post('/customers/find-or-create', [CustomerController::class, 'findOrCreate']);

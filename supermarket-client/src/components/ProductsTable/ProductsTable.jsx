@@ -3,6 +3,7 @@ import "./ProductsTable.css";
 import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
+// Componente que exibe a tabela de produtos disponíveis para adicionar ao carrinho
 export default function ProductsTable({ products, onAdd }) {
   return (
     <div className="table-container">

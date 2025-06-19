@@ -4,6 +4,8 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 
+
+// Model para a tabela 'customers'
 class Customers extends Model
 {
     protected $table = 'customers';
