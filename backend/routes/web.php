@@ -3,6 +3,7 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\OrderController;
 use App\Http\Controllers\ProductController;
+use App\Http\Controllers\CustomerController;
 
 // Rotas de pedidos
 Route::get('/orders', [OrderController::class, 'index']); // listar pedidos
@@ -17,3 +18,5 @@ Route::get('/products/stock', [ProductController::class, 'stock']);
 // Rota para listar todos os produtos
 Route::get('/products', [ProductController::class, 'index']);
 
+// Rota para encontrar ou criar um cliente
+Route::post('/customers/find-or-create', [CustomerController::class, 'findOrCreate']);

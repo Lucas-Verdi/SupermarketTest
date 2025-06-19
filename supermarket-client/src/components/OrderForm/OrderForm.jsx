@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import OrderItemsList from "./OrderItemsList";
 import TotalPrice from "./TotalPrice";
 
-const API_URL = "http://127.0.0.1:8000";
+const API_URL = "http://localhost:8000";
 
 export default function OrderForm() {
   const [customerName, setCustomerName] = useState("");
@@ -16,7 +16,7 @@ export default function OrderForm() {
       .then(res => res.json())
       .then(setProducts)
       .catch(() => setAlert("Erro ao buscar produtos!"));
-  }, []); // <-- array vazio garante que só roda ao montar
+  }, []);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -42,12 +42,29 @@ export default function OrderForm() {
       }
     }
 
+    // Passo 1: Buscar ou criar cliente e obter seu ID
+    let customerId;
+    try {
+      const customerRes = await fetch(`${API_URL}/customers/find-or-create`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ name: customerName }),
+      });
+      if (!customerRes.ok) throw new Error("Erro ao buscar/criar cliente");
+      const customer = await customerRes.json();
+      customerId = customer.id;
+    } catch {
+      setAlert("Erro ao buscar/criar cliente.");
+      return;
+    }
+
+    // Passo 2: Enviar pedido usando o customer_id
     try {
       const response = await fetch(`${API_URL}/orders`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
-          customer_name: customerName,
+          customer_id: customerId,
           delivery_date: deliveryDate,
           products: orderItems.map(({ id, quantity }) => ({
             id,

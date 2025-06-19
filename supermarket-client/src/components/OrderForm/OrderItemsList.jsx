@@ -24,11 +24,14 @@ export default function OrderItemsList({ products, items, setItems, setAlert }) 
               required
             >
               <option value="">Selecione o produto</option>
-              {products.map(p => (
-                <option key={p.id} value={p.id}>
-                  {p.name} (R${p.price.toFixed(2)}, estoque: {p.qty_stock})
-                </option>
-              ))}
+              {products.map(p => {
+                const price = Number(p.price);
+                return (
+                  <option key={p.id} value={p.id}>
+                    {p.name} (R${price.toFixed(2)}, estoque: {p.qty_stock})
+                  </option>
+                );
+              })}
             </select>
             <input
               type="number"
