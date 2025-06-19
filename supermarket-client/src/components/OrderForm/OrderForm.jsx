@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from "react";
-import OrderItemsList from "./OrderItemsList";
+import ProductsTable from "../ProductsTable/ProductsTable.js";
 import TotalPrice from "./TotalPrice";
+import { toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 const API_URL = "http://localhost:8000";
 
@@ -15,13 +17,68 @@ export default function OrderForm() {
     fetch(`${API_URL}/products`)
       .then(res => res.json())
       .then(setProducts)
-      .catch(() => setAlert("Erro ao buscar produtos!"));
+      .catch(() => toast.error("Erro ao buscar produtos!"));
   }, []);
+
+  // Adiciona produto ao carrinho (ou incrementa)
+  const handleAddToCart = (prod) => {
+    setAlert(null);
+    setOrderItems(prev => {
+      const found = prev.find(item => String(item.id) === String(prod.id));
+      if (found) {
+        // Verifica estoque
+        if (found.quantity + 1 > prod.qty_stock) {
+          setAlert(`Estoque insuficiente para "${prod.name}".`);
+          return prev;
+        }
+        return prev.map(item =>
+          String(item.id) === String(prod.id)
+            ? { ...item, quantity: item.quantity + 1 }
+            : item
+        );
+      }
+      return [...prev, { id: prod.id, quantity: 1 }];
+    });
+  };
+
+  // Remove item do carrinho
+  const handleRemove = (id) => {
+    setOrderItems(items => items.filter(item => String(item.id) !== String(id)));
+  };
+
+  // Altera quantidade manualmente
+  const handleQuantityChange = (id, val) => {
+    const prod = products.find(p => String(p.id) === String(id));
+    if (!prod) return;
+    if (val < 1) return;
+    if (val > prod.qty_stock) {
+      setAlert(`Estoque insuficiente para "${prod.name}".`);
+      return;
+    }
+    setOrderItems(items =>
+      items.map(item =>
+        String(item.id) === String(id)
+          ? { ...item, quantity: val }
+          : item
+      )
+    );
+    setAlert(null);
+  };
+
+  const fetchProducts = () => {
+  fetch(`${API_URL}/products`)
+    .then(res => res.json())
+    .then(setProducts)
+    .catch(() => toast.error("Erro ao buscar produtos!"));
+};
+
+useEffect(() => {
+  fetchProducts();
+}, []);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    // Validação simples
     if (!customerName || !deliveryDate || orderItems.length === 0) {
       setAlert("Preencha todos os campos e adicione pelo menos um produto.");
       return;
@@ -42,7 +99,6 @@ export default function OrderForm() {
       }
     }
 
-    // Passo 1: Buscar ou criar cliente e obter seu ID
     let customerId;
     try {
       const customerRes = await fetch(`${API_URL}/customers/find-or-create`, {
@@ -54,11 +110,10 @@ export default function OrderForm() {
       const customer = await customerRes.json();
       customerId = customer.id;
     } catch {
-      setAlert("Erro ao buscar/criar cliente.");
+      toast.error("Erro ao buscar/criar cliente.");
       return;
     }
 
-    // Passo 2: Enviar pedido usando o customer_id
     try {
       const response = await fetch(`${API_URL}/orders`, {
         method: "POST",
@@ -77,53 +132,95 @@ export default function OrderForm() {
         setAlert(error || "Erro ao salvar pedido.");
         return;
       }
-      setAlert("Pedido salvo com sucesso!");
+      toast.success(`Pedido salvo com sucesso!`);
       setCustomerName("");
       setDeliveryDate("");
       setOrderItems([]);
+      fetchProducts(); // Atualiza lista de produtos
     } catch {
-      setAlert("Erro na comunicação com o servidor.");
+      toast.error("Erro na comunicação com o servidor.");
     }
   };
 
   const handleAlertClose = () => setAlert(null);
 
   return (
-    <form onSubmit={handleSubmit}>
-      <h2>Novo Pedido</h2>
+    <form onSubmit={handleSubmit} style={{ maxWidth: 900, margin: "40px auto", padding: 24, borderRadius: 20, background: "rgba(255,255,255,0.88)", boxShadow: "0 8px 40px rgba(0,0,0,0.10)" }}>
+      <h2 style={{ marginBottom: 24 }}>Novo Pedido</h2>
       {alert && (
-        <div style={{ background: "#ffe6e6", padding: 8, marginBottom: 10 }}>
+        <div style={{ background: "#ffe6e6", padding: 8, marginBottom: 10, borderRadius: 8 }}>
           {alert} <button type="button" onClick={handleAlertClose}>X</button>
         </div>
       )}
-      <div>
+      <div style={{ marginBottom: 20 }}>
         <label>Nome do Cliente:</label>
         <input
           value={customerName}
           onChange={e => setCustomerName(e.target.value)}
           required
+          style={{ marginLeft: 8, padding: 8, borderRadius: 6, border: "1px solid #d0d0d0", minWidth: 200 }}
         />
       </div>
-      <div>
+      <div style={{ marginBottom: 20 }}>
         <label>Data de entrega:</label>
         <input
           type="date"
           value={deliveryDate}
           onChange={e => setDeliveryDate(e.target.value)}
           required
+          style={{ marginLeft: 8, padding: 8, borderRadius: 6, border: "1px solid #d0d0d0" }}
         />
       </div>
-      <OrderItemsList
-        products={products}
-        items={orderItems}
-        setItems={setOrderItems}
-        setAlert={setAlert}
-      />
-      <TotalPrice
-        items={orderItems}
-        products={products}
-      />
-      <button type="submit">Salvar Pedido</button>
+
+      {/* Carrinho */}
+      <div style={{ marginTop: 32 }}>
+        <h4 style={{ marginBottom: 8 }}>Carrinho</h4>
+        {orderItems.length === 0 && <div style={{ color: "#666" }}>Nenhum produto adicionado.</div>}
+        {orderItems.map((item, idx) => {
+          const prod = products.find(p => String(p.id) === String(item.id));
+          if (!prod) return null;
+          return (
+            <div key={item.id} style={{ display: "flex", alignItems: "center", gap: 16, marginBottom: 10, background: "#f8fafc", borderRadius: 8, padding: 10 }}>
+              <span style={{ minWidth: 160 }}>{prod.name}</span>
+              <span style={{ minWidth: 70 }}>R$ {Number(prod.price).toFixed(2)}</span>
+              <input
+                type="number"
+                min={1}
+                max={prod.qty_stock}
+                value={item.quantity}
+                onChange={e => handleQuantityChange(item.id, Number(e.target.value))}
+                style={{ width: 60, padding: 6, borderRadius: 6, border: "1px solid #d0d0d0" }}
+              />
+              <span style={{ color: "#8c8c8c" }}>estoque: {prod.qty_stock}</span>
+              <button
+                type="button"
+                onClick={() => {handleRemove(item.id); toast.warning(`Produto "${prod.name}" removido!`);}}
+                style={{ marginLeft: 12, background: "#f66", color: "#fff", border: "none", borderRadius: 6, padding: "6px 14px", cursor: "pointer" }}
+              >Remover</button>
+            </div>
+          );
+        })}
+      </div>
+
+      <TotalPrice items={orderItems} products={products} />
+      <button type="submit" style={{
+        marginTop: 28,
+        fontWeight: 700,
+        background: "linear-gradient(90deg,#69e8f7 0%,#a6c1ee 100%)",
+        border: "none",
+        color: "#263238",
+        borderRadius: 10,
+        padding: "14px 30px",
+        fontSize: 17,
+        cursor: "pointer",
+        boxShadow: "0 2px 12px rgba(166,193,238,0.15)"
+      }}>
+        Salvar Pedido
+      </button>
+
+      {/* Nova Tabela de Produtos */}
+      <ProductsTable products={products} onAdd={handleAddToCart} />
+
     </form>
   );
 }

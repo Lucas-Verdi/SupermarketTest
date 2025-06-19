@@ -1,0 +1,59 @@
+.table-container {
+  margin: 40px auto;
+  padding: 24px;
+  border-radius: 20px;
+  box-shadow: 0 8px 40px rgba(0,0,0,0.24), 0 2px 4px rgba(0,0,0,0.18);
+  background: rgba(255,255,255,0.25);
+  backdrop-filter: blur(10px);
+  max-width: 900px;
+}
+
+.products-table {
+  width: 100%;
+  border-collapse: separate;
+  border-spacing: 0;
+  font-family: 'Segoe UI', 'Arial', sans-serif;
+  background: rgba(255,255,255,0.9);
+  border-radius: 16px;
+  overflow: hidden;
+}
+
+.products-table th, .products-table td {
+  padding: 16px 20px;
+  text-align: left;
+}
+
+.products-table thead tr {
+  background: linear-gradient(90deg, #96e6a1 0%, #d4fc79 100%);
+  color: #2d3e50;
+  font-size: 1.1rem;
+  letter-spacing: 0.04em;
+}
+
+.products-table tbody tr {
+  transition: background 0.2s;
+}
+
+.products-table tbody tr:hover {
+  background: rgba(75, 207, 250, 0.11);
+}
+
+.btn-add {
+  padding: 10px 18px;
+  background: linear-gradient(90deg, #69e8f7 0%, #a6c1ee 100%);
+  color: #263238;
+  border: none;
+  border-radius: 8px;
+  font-weight: 600;
+  cursor: pointer;
+  box-shadow: 0 2px 8px rgba(166,193,238,0.2);
+  transition: background 0.2s, transform 0.15s;
+}
+.btn-add:active {
+  transform: scale(0.95);
+}
+.btn-add:disabled {
+  background: #d6d6d6;
+  color: #999;
+  cursor: not-allowed;
+}
