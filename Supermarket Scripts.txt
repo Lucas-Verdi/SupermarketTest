@@ -1,0 +1,872 @@
+USE [master]
+GO
+/****** Object:  Database [Supermarket]    Script Date: 20/06/2025 10:41:16 ******/
+CREATE DATABASE [Supermarket]
+ CONTAINMENT = NONE
+ ON  PRIMARY 
+( NAME = N'Supermarket', FILENAME = N'C:\Program Files\Microsoft SQL Server\MSSQL16.MSSQLSERVER\MSSQL\DATA\Supermarket.mdf' , SIZE = 8192KB , MAXSIZE = UNLIMITED, FILEGROWTH = 65536KB )
+ LOG ON 
+( NAME = N'Supermarket_log', FILENAME = N'C:\Program Files\Microsoft SQL Server\MSSQL16.MSSQLSERVER\MSSQL\DATA\Supermarket_log.ldf' , SIZE = 8192KB , MAXSIZE = 2048GB , FILEGROWTH = 65536KB )
+ WITH CATALOG_COLLATION = DATABASE_DEFAULT, LEDGER = OFF
+GO
+ALTER DATABASE [Supermarket] SET COMPATIBILITY_LEVEL = 160
+GO
+IF (1 = FULLTEXTSERVICEPROPERTY('IsFullTextInstalled'))
+begin
+EXEC [Supermarket].[dbo].[sp_fulltext_database] @action = 'enable'
+end
+GO
+ALTER DATABASE [Supermarket] SET ANSI_NULL_DEFAULT OFF 
+GO
+ALTER DATABASE [Supermarket] SET ANSI_NULLS OFF 
+GO
+ALTER DATABASE [Supermarket] SET ANSI_PADDING OFF 
+GO
+ALTER DATABASE [Supermarket] SET ANSI_WARNINGS OFF 
+GO
+ALTER DATABASE [Supermarket] SET ARITHABORT OFF 
+GO
+ALTER DATABASE [Supermarket] SET AUTO_CLOSE OFF 
+GO
+ALTER DATABASE [Supermarket] SET AUTO_SHRINK OFF 
+GO
+ALTER DATABASE [Supermarket] SET AUTO_UPDATE_STATISTICS ON 
+GO
+ALTER DATABASE [Supermarket] SET CURSOR_CLOSE_ON_COMMIT OFF 
+GO
+ALTER DATABASE [Supermarket] SET CURSOR_DEFAULT  GLOBAL 
+GO
+ALTER DATABASE [Supermarket] SET CONCAT_NULL_YIELDS_NULL OFF 
+GO
+ALTER DATABASE [Supermarket] SET NUMERIC_ROUNDABORT OFF 
+GO
+ALTER DATABASE [Supermarket] SET QUOTED_IDENTIFIER OFF 
+GO
+ALTER DATABASE [Supermarket] SET RECURSIVE_TRIGGERS OFF 
+GO
+ALTER DATABASE [Supermarket] SET  DISABLE_BROKER 
+GO
+ALTER DATABASE [Supermarket] SET AUTO_UPDATE_STATISTICS_ASYNC OFF 
+GO
+ALTER DATABASE [Supermarket] SET DATE_CORRELATION_OPTIMIZATION OFF 
+GO
+ALTER DATABASE [Supermarket] SET TRUSTWORTHY OFF 
+GO
+ALTER DATABASE [Supermarket] SET ALLOW_SNAPSHOT_ISOLATION OFF 
+GO
+ALTER DATABASE [Supermarket] SET PARAMETERIZATION SIMPLE 
+GO
+ALTER DATABASE [Supermarket] SET READ_COMMITTED_SNAPSHOT OFF 
+GO
+ALTER DATABASE [Supermarket] SET HONOR_BROKER_PRIORITY OFF 
+GO
+ALTER DATABASE [Supermarket] SET RECOVERY FULL 
+GO
+ALTER DATABASE [Supermarket] SET  MULTI_USER 
+GO
+ALTER DATABASE [Supermarket] SET PAGE_VERIFY CHECKSUM  
+GO
+ALTER DATABASE [Supermarket] SET DB_CHAINING OFF 
+GO
+ALTER DATABASE [Supermarket] SET FILESTREAM( NON_TRANSACTED_ACCESS = OFF ) 
+GO
+ALTER DATABASE [Supermarket] SET TARGET_RECOVERY_TIME = 60 SECONDS 
+GO
+ALTER DATABASE [Supermarket] SET DELAYED_DURABILITY = DISABLED 
+GO
+ALTER DATABASE [Supermarket] SET ACCELERATED_DATABASE_RECOVERY = OFF  
+GO
+EXEC sys.sp_db_vardecimal_storage_format N'Supermarket', N'ON'
+GO
+ALTER DATABASE [Supermarket] SET QUERY_STORE = ON
+GO
+ALTER DATABASE [Supermarket] SET QUERY_STORE (OPERATION_MODE = READ_WRITE, CLEANUP_POLICY = (STALE_QUERY_THRESHOLD_DAYS = 30), DATA_FLUSH_INTERVAL_SECONDS = 900, INTERVAL_LENGTH_MINUTES = 60, MAX_STORAGE_SIZE_MB = 1000, QUERY_CAPTURE_MODE = AUTO, SIZE_BASED_CLEANUP_MODE = AUTO, MAX_PLANS_PER_QUERY = 200, WAIT_STATS_CAPTURE_MODE = ON)
+GO
+USE [Supermarket]
+GO
+/****** Object:  Table [dbo].[cache]    Script Date: 20/06/2025 10:41:19 ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE TABLE [dbo].[cache](
+	[key] [nvarchar](255) NOT NULL,
+	[value] [nvarchar](max) NOT NULL,
+	[expiration] [int] NOT NULL,
+ CONSTRAINT [cache_key_primary] PRIMARY KEY CLUSTERED 
+(
+	[key] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
+) ON [PRIMARY] TEXTIMAGE_ON [PRIMARY]
+GO
+/****** Object:  Table [dbo].[cache_locks]    Script Date: 20/06/2025 10:41:20 ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE TABLE [dbo].[cache_locks](
+	[key] [nvarchar](255) NOT NULL,
+	[owner] [nvarchar](255) NOT NULL,
+	[expiration] [int] NOT NULL,
+ CONSTRAINT [cache_locks_key_primary] PRIMARY KEY CLUSTERED 
+(
+	[key] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
+) ON [PRIMARY]
+GO
+/****** Object:  Table [dbo].[Customers]    Script Date: 20/06/2025 10:41:20 ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE TABLE [dbo].[Customers](
+	[id] [int] IDENTITY(1,1) NOT NULL,
+	[name] [varchar](100) NOT NULL,
+PRIMARY KEY CLUSTERED 
+(
+	[id] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
+) ON [PRIMARY]
+GO
+/****** Object:  Table [dbo].[failed_jobs]    Script Date: 20/06/2025 10:41:20 ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE TABLE [dbo].[failed_jobs](
+	[id] [bigint] IDENTITY(1,1) NOT NULL,
+	[uuid] [nvarchar](255) NOT NULL,
+	[connection] [nvarchar](max) NOT NULL,
+	[queue] [nvarchar](max) NOT NULL,
+	[payload] [nvarchar](max) NOT NULL,
+	[exception] [nvarchar](max) NOT NULL,
+	[failed_at] [datetime] NOT NULL,
+PRIMARY KEY CLUSTERED 
+(
+	[id] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
+) ON [PRIMARY] TEXTIMAGE_ON [PRIMARY]
+GO
+/****** Object:  Table [dbo].[job_batches]    Script Date: 20/06/2025 10:41:20 ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE TABLE [dbo].[job_batches](
+	[id] [nvarchar](255) NOT NULL,
+	[name] [nvarchar](255) NOT NULL,
+	[total_jobs] [int] NOT NULL,
+	[pending_jobs] [int] NOT NULL,
+	[failed_jobs] [int] NOT NULL,
+	[failed_job_ids] [nvarchar](max) NOT NULL,
+	[options] [nvarchar](max) NULL,
+	[cancelled_at] [int] NULL,
+	[created_at] [int] NOT NULL,
+	[finished_at] [int] NULL,
+ CONSTRAINT [job_batches_id_primary] PRIMARY KEY CLUSTERED 
+(
+	[id] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
+) ON [PRIMARY] TEXTIMAGE_ON [PRIMARY]
+GO
+/****** Object:  Table [dbo].[jobs]    Script Date: 20/06/2025 10:41:20 ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE TABLE [dbo].[jobs](
+	[id] [bigint] IDENTITY(1,1) NOT NULL,
+	[queue] [nvarchar](255) NOT NULL,
+	[payload] [nvarchar](max) NOT NULL,
+	[attempts] [tinyint] NOT NULL,
+	[reserved_at] [int] NULL,
+	[available_at] [int] NOT NULL,
+	[created_at] [int] NOT NULL,
+PRIMARY KEY CLUSTERED 
+(
+	[id] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
+) ON [PRIMARY] TEXTIMAGE_ON [PRIMARY]
+GO
+/****** Object:  Table [dbo].[migrations]    Script Date: 20/06/2025 10:41:20 ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE TABLE [dbo].[migrations](
+	[id] [int] IDENTITY(1,1) NOT NULL,
+	[migration] [nvarchar](255) NOT NULL,
+	[batch] [int] NOT NULL,
+PRIMARY KEY CLUSTERED 
+(
+	[id] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
+) ON [PRIMARY]
+GO
+/****** Object:  Table [dbo].[Orders]    Script Date: 20/06/2025 10:41:20 ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE TABLE [dbo].[Orders](
+	[id] [int] IDENTITY(1,1) NOT NULL,
+	[customerId] [int] NOT NULL,
+	[delivery_date] [date] NOT NULL,
+	[total] [float] NOT NULL,
+PRIMARY KEY CLUSTERED 
+(
+	[id] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
+) ON [PRIMARY]
+GO
+/****** Object:  Table [dbo].[OrdersProducts]    Script Date: 20/06/2025 10:41:20 ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE TABLE [dbo].[OrdersProducts](
+	[id] [int] IDENTITY(1,1) NOT NULL,
+	[orderId] [int] NOT NULL,
+	[productId] [int] NOT NULL,
+	[quantity] [int] NOT NULL,
+	[price] [float] NOT NULL,
+PRIMARY KEY CLUSTERED 
+(
+	[id] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
+) ON [PRIMARY]
+GO
+/****** Object:  Table [dbo].[password_reset_tokens]    Script Date: 20/06/2025 10:41:20 ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE TABLE [dbo].[password_reset_tokens](
+	[email] [nvarchar](255) NOT NULL,
+	[token] [nvarchar](255) NOT NULL,
+	[created_at] [datetime] NULL,
+ CONSTRAINT [password_reset_tokens_email_primary] PRIMARY KEY CLUSTERED 
+(
+	[email] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
+) ON [PRIMARY]
+GO
+/****** Object:  Table [dbo].[Products]    Script Date: 20/06/2025 10:41:20 ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE TABLE [dbo].[Products](
+	[id] [int] IDENTITY(1,1) NOT NULL,
+	[name] [varchar](100) NOT NULL,
+	[price] [float] NOT NULL,
+	[qty_stock] [int] NOT NULL,
+PRIMARY KEY CLUSTERED 
+(
+	[id] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
+) ON [PRIMARY]
+GO
+/****** Object:  Table [dbo].[sessions]    Script Date: 20/06/2025 10:41:20 ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE TABLE [dbo].[sessions](
+	[id] [nvarchar](255) NOT NULL,
+	[user_id] [bigint] NULL,
+	[ip_address] [nvarchar](45) NULL,
+	[user_agent] [nvarchar](max) NULL,
+	[payload] [nvarchar](max) NOT NULL,
+	[last_activity] [int] NOT NULL,
+ CONSTRAINT [sessions_id_primary] PRIMARY KEY CLUSTERED 
+(
+	[id] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
+) ON [PRIMARY] TEXTIMAGE_ON [PRIMARY]
+GO
+/****** Object:  Table [dbo].[users]    Script Date: 20/06/2025 10:41:20 ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE TABLE [dbo].[users](
+	[id] [bigint] IDENTITY(1,1) NOT NULL,
+	[name] [nvarchar](255) NOT NULL,
+	[email] [nvarchar](255) NOT NULL,
+	[email_verified_at] [datetime] NULL,
+	[password] [nvarchar](255) NOT NULL,
+	[remember_token] [nvarchar](100) NULL,
+	[created_at] [datetime] NULL,
+	[updated_at] [datetime] NULL,
+PRIMARY KEY CLUSTERED 
+(
+	[id] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
+) ON [PRIMARY]
+GO
+SET IDENTITY_INSERT [dbo].[Customers] ON 
+GO
+INSERT [dbo].[Customers] ([id], [name]) VALUES (1, N'Lucas')
+GO
+INSERT [dbo].[Customers] ([id], [name]) VALUES (2, N'Teste')
+GO
+INSERT [dbo].[Customers] ([id], [name]) VALUES (3, N'Elias')
+GO
+INSERT [dbo].[Customers] ([id], [name]) VALUES (4, N'Gabe Rodrigues')
+GO
+SET IDENTITY_INSERT [dbo].[Customers] OFF
+GO
+SET IDENTITY_INSERT [dbo].[migrations] ON 
+GO
+INSERT [dbo].[migrations] ([id], [migration], [batch]) VALUES (1, N'0001_01_01_000000_create_users_table', 1)
+GO
+INSERT [dbo].[migrations] ([id], [migration], [batch]) VALUES (2, N'0001_01_01_000001_create_cache_table', 1)
+GO
+INSERT [dbo].[migrations] ([id], [migration], [batch]) VALUES (3, N'0001_01_01_000002_create_jobs_table', 1)
+GO
+SET IDENTITY_INSERT [dbo].[migrations] OFF
+GO
+SET IDENTITY_INSERT [dbo].[Orders] ON 
+GO
+INSERT [dbo].[Orders] ([id], [customerId], [delivery_date], [total]) VALUES (2, 1, CAST(N'2025-07-02' AS Date), 20.49)
+GO
+INSERT [dbo].[Orders] ([id], [customerId], [delivery_date], [total]) VALUES (3, 1, CAST(N'2025-06-27' AS Date), 20.49)
+GO
+INSERT [dbo].[Orders] ([id], [customerId], [delivery_date], [total]) VALUES (4, 2, CAST(N'2025-07-10' AS Date), 31.55)
+GO
+INSERT [dbo].[Orders] ([id], [customerId], [delivery_date], [total]) VALUES (5, 1, CAST(N'2025-06-30' AS Date), 26.97)
+GO
+INSERT [dbo].[Orders] ([id], [customerId], [delivery_date], [total]) VALUES (6, 1, CAST(N'2025-07-01' AS Date), 20.98)
+GO
+INSERT [dbo].[Orders] ([id], [customerId], [delivery_date], [total]) VALUES (7, 1, CAST(N'2025-06-27' AS Date), 8.99)
+GO
+INSERT [dbo].[Orders] ([id], [customerId], [delivery_date], [total]) VALUES (8, 1, CAST(N'2025-07-12' AS Date), 8.99)
+GO
+INSERT [dbo].[Orders] ([id], [customerId], [delivery_date], [total]) VALUES (9, 2, CAST(N'2025-06-26' AS Date), 8.99)
+GO
+INSERT [dbo].[Orders] ([id], [customerId], [delivery_date], [total]) VALUES (10, 2, CAST(N'2025-06-28' AS Date), 8.99)
+GO
+INSERT [dbo].[Orders] ([id], [customerId], [delivery_date], [total]) VALUES (11, 2, CAST(N'2025-06-30' AS Date), 8.99)
+GO
+INSERT [dbo].[Orders] ([id], [customerId], [delivery_date], [total]) VALUES (12, 2, CAST(N'2025-08-05' AS Date), 7.29)
+GO
+INSERT [dbo].[Orders] ([id], [customerId], [delivery_date], [total]) VALUES (13, 1, CAST(N'2025-09-24' AS Date), 27.07)
+GO
+INSERT [dbo].[Orders] ([id], [customerId], [delivery_date], [total]) VALUES (14, 3, CAST(N'2025-06-20' AS Date), 2177.12)
+GO
+INSERT [dbo].[Orders] ([id], [customerId], [delivery_date], [total]) VALUES (15, 4, CAST(N'2025-06-20' AS Date), 33.3)
+GO
+INSERT [dbo].[Orders] ([id], [customerId], [delivery_date], [total]) VALUES (16, 1, CAST(N'2025-07-10' AS Date), 8.99)
+GO
+SET IDENTITY_INSERT [dbo].[Orders] OFF
+GO
+SET IDENTITY_INSERT [dbo].[OrdersProducts] ON 
+GO
+INSERT [dbo].[OrdersProducts] ([id], [orderId], [productId], [quantity], [price]) VALUES (1, 2, 1, 1, 20.49)
+GO
+INSERT [dbo].[OrdersProducts] ([id], [orderId], [productId], [quantity], [price]) VALUES (2, 3, 1, 1, 20.49)
+GO
+INSERT [dbo].[OrdersProducts] ([id], [orderId], [productId], [quantity], [price]) VALUES (3, 4, 2, 3, 8.99)
+GO
+INSERT [dbo].[OrdersProducts] ([id], [orderId], [productId], [quantity], [price]) VALUES (4, 4, 10, 2, 2.29)
+GO
+INSERT [dbo].[OrdersProducts] ([id], [orderId], [productId], [quantity], [price]) VALUES (5, 5, 2, 3, 8.99)
+GO
+INSERT [dbo].[OrdersProducts] ([id], [orderId], [productId], [quantity], [price]) VALUES (6, 6, 50, 1, 11.99)
+GO
+INSERT [dbo].[OrdersProducts] ([id], [orderId], [productId], [quantity], [price]) VALUES (7, 6, 2, 1, 8.99)
+GO
+INSERT [dbo].[OrdersProducts] ([id], [orderId], [productId], [quantity], [price]) VALUES (8, 7, 2, 1, 8.99)
+GO
+INSERT [dbo].[OrdersProducts] ([id], [orderId], [productId], [quantity], [price]) VALUES (9, 8, 2, 1, 8.99)
+GO
+INSERT [dbo].[OrdersProducts] ([id], [orderId], [productId], [quantity], [price]) VALUES (10, 9, 2, 1, 8.99)
+GO
+INSERT [dbo].[OrdersProducts] ([id], [orderId], [productId], [quantity], [price]) VALUES (11, 10, 2, 1, 8.99)
+GO
+INSERT [dbo].[OrdersProducts] ([id], [orderId], [productId], [quantity], [price]) VALUES (12, 11, 2, 1, 8.99)
+GO
+INSERT [dbo].[OrdersProducts] ([id], [orderId], [productId], [quantity], [price]) VALUES (13, 12, 3, 1, 7.29)
+GO
+INSERT [dbo].[OrdersProducts] ([id], [orderId], [productId], [quantity], [price]) VALUES (14, 13, 3, 1, 7.29)
+GO
+INSERT [dbo].[OrdersProducts] ([id], [orderId], [productId], [quantity], [price]) VALUES (15, 13, 4, 1, 10.79)
+GO
+INSERT [dbo].[OrdersProducts] ([id], [orderId], [productId], [quantity], [price]) VALUES (16, 13, 2, 1, 8.99)
+GO
+INSERT [dbo].[OrdersProducts] ([id], [orderId], [productId], [quantity], [price]) VALUES (17, 14, 2, 200, 8.99)
+GO
+INSERT [dbo].[OrdersProducts] ([id], [orderId], [productId], [quantity], [price]) VALUES (18, 14, 3, 1, 7.29)
+GO
+INSERT [dbo].[OrdersProducts] ([id], [orderId], [productId], [quantity], [price]) VALUES (19, 14, 5, 7, 7.49)
+GO
+INSERT [dbo].[OrdersProducts] ([id], [orderId], [productId], [quantity], [price]) VALUES (20, 14, 4, 1, 10.79)
+GO
+INSERT [dbo].[OrdersProducts] ([id], [orderId], [productId], [quantity], [price]) VALUES (21, 14, 22, 3, 8.99)
+GO
+INSERT [dbo].[OrdersProducts] ([id], [orderId], [productId], [quantity], [price]) VALUES (22, 14, 35, 15, 10.49)
+GO
+INSERT [dbo].[OrdersProducts] ([id], [orderId], [productId], [quantity], [price]) VALUES (23, 14, 41, 1, 3.9)
+GO
+INSERT [dbo].[OrdersProducts] ([id], [orderId], [productId], [quantity], [price]) VALUES (24, 14, 40, 1, 7.99)
+GO
+INSERT [dbo].[OrdersProducts] ([id], [orderId], [productId], [quantity], [price]) VALUES (25, 14, 50, 9, 11.99)
+GO
+INSERT [dbo].[OrdersProducts] ([id], [orderId], [productId], [quantity], [price]) VALUES (26, 14, 46, 1, 4.49)
+GO
+INSERT [dbo].[OrdersProducts] ([id], [orderId], [productId], [quantity], [price]) VALUES (27, 15, 49, 1, 1.75)
+GO
+INSERT [dbo].[OrdersProducts] ([id], [orderId], [productId], [quantity], [price]) VALUES (28, 15, 3, 3, 7.29)
+GO
+INSERT [dbo].[OrdersProducts] ([id], [orderId], [productId], [quantity], [price]) VALUES (29, 15, 5, 1, 7.49)
+GO
+INSERT [dbo].[OrdersProducts] ([id], [orderId], [productId], [quantity], [price]) VALUES (30, 15, 14, 1, 2.19)
+GO
+INSERT [dbo].[OrdersProducts] ([id], [orderId], [productId], [quantity], [price]) VALUES (31, 16, 2, 1, 8.99)
+GO
+SET IDENTITY_INSERT [dbo].[OrdersProducts] OFF
+GO
+SET IDENTITY_INSERT [dbo].[Products] ON 
+GO
+INSERT [dbo].[Products] ([id], [name], [price], [qty_stock]) VALUES (1, N'AZEITE  PORTUGUÊS EXTRA VIRGEM GALLO 500ML', 20.49, 0)
+GO
+INSERT [dbo].[Products] ([id], [name], [price], [qty_stock]) VALUES (2, N'BEBIDA ENERGÉTICA VIBE 2L', 8.99, 445)
+GO
+INSERT [dbo].[Products] ([id], [name], [price], [qty_stock]) VALUES (3, N'ENERGÉTICO RED BULL ENERGY DRINK 250ML', 7.29, 903)
+GO
+INSERT [dbo].[Products] ([id], [name], [price], [qty_stock]) VALUES (4, N'ENERGÉTICO RED BULL ENERGY DRINK 355ML', 10.79, 157)
+GO
+INSERT [dbo].[Products] ([id], [name], [price], [qty_stock]) VALUES (5, N'ENERGÉTICO RED BULL ENERGY DRINK SEM AÇÚCAR 250ML', 7.49, 651)
+GO
+INSERT [dbo].[Products] ([id], [name], [price], [qty_stock]) VALUES (6, N'ÁGUA MINERAL BONAFONT SEM GÁS 1', 2.39, 909)
+GO
+INSERT [dbo].[Products] ([id], [name], [price], [qty_stock]) VALUES (7, N'FILME DE PVC WYDA 28CMX15M', 3.99, 160)
+GO
+INSERT [dbo].[Products] ([id], [name], [price], [qty_stock]) VALUES (8, N'FILME DE PVC PRATSY 15M', 4.39, 410)
+GO
+INSERT [dbo].[Products] ([id], [name], [price], [qty_stock]) VALUES (9, N'ROLO DE PAPEL ALUMÍNIO WYDA 30CMX7', 5.79, 660)
+GO
+INSERT [dbo].[Products] ([id], [name], [price], [qty_stock]) VALUES (10, N'ÁGUA MINERAL SEM GÁS MINALBA 1', 2.29, 908)
+GO
+INSERT [dbo].[Products] ([id], [name], [price], [qty_stock]) VALUES (11, N'GUARDANAPO GRAND HOTEL SCOTT 24X24CM C/ 50UN', 4.39, 160)
+GO
+INSERT [dbo].[Products] ([id], [name], [price], [qty_stock]) VALUES (12, N'GUARDANAPO DIA A DIA SCOTT 24X22CM C/ 50UN', 2.59, 411)
+GO
+INSERT [dbo].[Products] ([id], [name], [price], [qty_stock]) VALUES (13, N'GUARDANAPO FOLHA DUPLA SNOB 23', 4.25, 411)
+GO
+INSERT [dbo].[Products] ([id], [name], [price], [qty_stock]) VALUES (14, N'GUARDANAPO FOLHA SIMPLES SNOB 24X22CM C/ 50UN', 2.19, 660)
+GO
+INSERT [dbo].[Products] ([id], [name], [price], [qty_stock]) VALUES (15, N'PAPEL TOALHA SNOB C/ 2UN', 5.39, 912)
+GO
+INSERT [dbo].[Products] ([id], [name], [price], [qty_stock]) VALUES (16, N'TOALHA DE PAPEL SCOTT DURAMAX C/ 1UN', 11.29, 162)
+GO
+INSERT [dbo].[Products] ([id], [name], [price], [qty_stock]) VALUES (17, N'PRATO DESCARTÁVEL COPOBRAS 18CM', 1.99, 163)
+GO
+INSERT [dbo].[Products] ([id], [name], [price], [qty_stock]) VALUES (18, N'PRATO DESCARTÁVEL COPOBRAS 15CM', 2.9, 413)
+GO
+INSERT [dbo].[Products] ([id], [name], [price], [qty_stock]) VALUES (19, N'PRATO DESCARTÁVEL COPOBRAS 21CM', 3.79, 913)
+GO
+INSERT [dbo].[Products] ([id], [name], [price], [qty_stock]) VALUES (20, N'COLHER DESCARTÁVEL MASTER PRAFESTA BRANCA C/ 50UN', 5.99, 413)
+GO
+INSERT [dbo].[Products] ([id], [name], [price], [qty_stock]) VALUES (21, N'GARFO DESCARTÁVEL MASTER PRAFESTA CRYSTAL C/ 50UN', 7.49, 914)
+GO
+INSERT [dbo].[Products] ([id], [name], [price], [qty_stock]) VALUES (22, N'FACA DESCARTÁVEL MASTER PRAFESTA CRYSTAL C/ 50UN', 8.99, 0)
+GO
+INSERT [dbo].[Products] ([id], [name], [price], [qty_stock]) VALUES (23, N'SACO PARA LIXO DOVER ROLL SUPER FORTE AZUL 50L C/ 30UN', 42.9, 915)
+GO
+INSERT [dbo].[Products] ([id], [name], [price], [qty_stock]) VALUES (24, N'PANO PARA LIMPEZA PERFEX C/ 5UN', 6.99, 415)
+GO
+INSERT [dbo].[Products] ([id], [name], [price], [qty_stock]) VALUES (25, N'PANO PARA LIMPEZA ALKLIN C/ 5UN', 4.79, 665)
+GO
+INSERT [dbo].[Products] ([id], [name], [price], [qty_stock]) VALUES (26, N'VELA SANTA CRUZ BRANCA C/8 25G', 5.89, 915)
+GO
+INSERT [dbo].[Products] ([id], [name], [price], [qty_stock]) VALUES (27, N'VELA SANTA CRUZ C/8 30G', 6.89, 416)
+GO
+INSERT [dbo].[Products] ([id], [name], [price], [qty_stock]) VALUES (28, N'BEBIDA DE SOJA SOYOS SÚFRESH LARANJA E CENOURA 1L', 4.99, 666)
+GO
+INSERT [dbo].[Products] ([id], [name], [price], [qty_stock]) VALUES (29, N'BEBIDA A BASE DE SOJA ADES LARANJA 1L', 5.39, 916)
+GO
+INSERT [dbo].[Products] ([id], [name], [price], [qty_stock]) VALUES (30, N'BEBIDA A BASE DE SOJA ADES MAÇÃ 1L', 5.59, 166)
+GO
+INSERT [dbo].[Products] ([id], [name], [price], [qty_stock]) VALUES (31, N'BEBIDA À BASE DE SOJA ADES MAÇÃ ZERO 1L', 7.39, 416)
+GO
+INSERT [dbo].[Products] ([id], [name], [price], [qty_stock]) VALUES (32, N'BEBIDA À BASE DE SOJA ADES LARANJA ZERO 1L', 7.39, 667)
+GO
+INSERT [dbo].[Products] ([id], [name], [price], [qty_stock]) VALUES (33, N'CREME DE TRATAMENTO ELSEVE ULTRA LISO 300G', 16.99, 417)
+GO
+INSERT [dbo].[Products] ([id], [name], [price], [qty_stock]) VALUES (34, N'CREME DE TRATAMENTO ELSEVE OLÉO EXTRAORDINÁRIO 300G', 18.99, 667)
+GO
+INSERT [dbo].[Products] ([id], [name], [price], [qty_stock]) VALUES (35, N'DESODORANTE ROLL ON DOVE ORIGINAL 50ML', 10.49, 654)
+GO
+INSERT [dbo].[Products] ([id], [name], [price], [qty_stock]) VALUES (36, N'DESODORANTE ROLL ON DOVE SENSITIVE SEM PERFUME 50ML', 10.74, 919)
+GO
+INSERT [dbo].[Products] ([id], [name], [price], [qty_stock]) VALUES (37, N'DESODORANTE AEROSOL DOVE BEAUTY 150ML', 14.99, 169)
+GO
+INSERT [dbo].[Products] ([id], [name], [price], [qty_stock]) VALUES (38, N'DESODORANTE AEROSOL DOVE PURE 100G', 13.19, 419)
+GO
+INSERT [dbo].[Products] ([id], [name], [price], [qty_stock]) VALUES (39, N'REFRIGERANTE ANTARCTICA GUARANÁ 2L', 6.79, 670)
+GO
+INSERT [dbo].[Products] ([id], [name], [price], [qty_stock]) VALUES (40, N'ÁGUA MINERAL SEM GÁS CRYSTAL GARRAFÃO 5L', 7.99, 919)
+GO
+INSERT [dbo].[Products] ([id], [name], [price], [qty_stock]) VALUES (41, N'REFRIGERANTE H2OH! DE LIMÃO 500ML', 3.9, 669)
+GO
+INSERT [dbo].[Products] ([id], [name], [price], [qty_stock]) VALUES (42, N'DESODORANTE AEROSOL NIVEA SENSITIVE SEM PERFUME 150ML', 11.99, 171)
+GO
+INSERT [dbo].[Products] ([id], [name], [price], [qty_stock]) VALUES (43, N'REFRIGERANTE H2OH! LIMÃO 1', 6.99, 921)
+GO
+INSERT [dbo].[Products] ([id], [name], [price], [qty_stock]) VALUES (44, N'DESODORANTE AEROSOL NIVEA BLACK&WHITE INVISIBLE MASCULINO 150ML', 11.99, 171)
+GO
+INSERT [dbo].[Products] ([id], [name], [price], [qty_stock]) VALUES (45, N'ÁGUA MINERAL PRATA SEM GÁS 1', 3.9, 172)
+GO
+INSERT [dbo].[Products] ([id], [name], [price], [qty_stock]) VALUES (46, N'NÉCTAR MAGUARY DE MARACUJÁ 1L', 4.49, 671)
+GO
+INSERT [dbo].[Products] ([id], [name], [price], [qty_stock]) VALUES (47, N'REFRIGERANTE ANTARCTICA GUARANÁ ZERO 2L', 5.79, 923)
+GO
+INSERT [dbo].[Products] ([id], [name], [price], [qty_stock]) VALUES (48, N'ÁGUA MINERAL SEM GÁS CRYSTAL PET 1', 2.59, 173)
+GO
+INSERT [dbo].[Products] ([id], [name], [price], [qty_stock]) VALUES (49, N'ÁGUA MINERAL BONAFONT SEM GÁS 500ML', 1.75, 422)
+GO
+INSERT [dbo].[Products] ([id], [name], [price], [qty_stock]) VALUES (50, N'DESODORANTE AEROSOL REXONA ANTIBACTERIANO + INVISIBLE PROTECTION FEMININO 150ML', 11.99, 663)
+GO
+SET IDENTITY_INSERT [dbo].[Products] OFF
+GO
+INSERT [dbo].[sessions] ([id], [user_id], [ip_address], [user_agent], [payload], [last_activity]) VALUES (N'09tszrmKdukNZ77fFrXg9F84TytToD3kVWT59WmY', NULL, N'131.255.37.4', N'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/137.0.0.0 Safari/537.36', N'YTozOntzOjY6Il90b2tlbiI7czo0MDoicUFPN3ExNjNwNDAxOWZBdEs0YUhsS0tMYVQ1aXpkbHplcW5VV0ZTVyI7czo5OiJfcHJldmlvdXMiO2E6MTp7czozOiJ1cmwiO3M6NjA6Imh0dHA6Ly9nYXVudGxldC5icmF6aWxzb3V0aC5jbG91ZGFwcC5henVyZS5jb206ODAwMC9wcm9kdWN0cyI7fXM6NjoiX2ZsYXNoIjthOjI6e3M6Mzoib2xkIjthOjA6e31zOjM6Im5ldyI7YTowOnt9fX0=', 1750424634)
+GO
+INSERT [dbo].[sessions] ([id], [user_id], [ip_address], [user_agent], [payload], [last_activity]) VALUES (N'09XDrs0wCu02vDWPIj7QVnMWjPIHtFI2yywtjtsI', NULL, N'187.35.3.127', N'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/137.0.0.0 Safari/537.36', N'YTozOntzOjY6Il90b2tlbiI7czo0MDoiS0liZWU1eUVlNjJHVDIxSDlUWktXT2pXRVRBa0Npdm5EalBBMU82NCI7czo5OiJfcHJldmlvdXMiO2E6MTp7czozOiJ1cmwiO3M6NjA6Imh0dHA6Ly9nYXVudGxldC5icmF6aWxzb3V0aC5jbG91ZGFwcC5henVyZS5jb206ODAwMC9wcm9kdWN0cyI7fXM6NjoiX2ZsYXNoIjthOjI6e3M6Mzoib2xkIjthOjA6e31zOjM6Im5ldyI7YTowOnt9fX0=', 1750375309)
+GO
+INSERT [dbo].[sessions] ([id], [user_id], [ip_address], [user_agent], [payload], [last_activity]) VALUES (N'0jdOVCrjLPwmEUZnJ2LrIydUMJhP8POHeObeaYtK', NULL, N'177.40.7.226', N'Mozilla/5.0 (iPhone; CPU iPhone OS 18_5_0 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) CriOS/137.0.7151.107 Mobile/15E148 Safari/604.1', N'YTozOntzOjY6Il90b2tlbiI7czo0MDoiQjdmS3BUSXlFQmZ3VlVLYnJSVUR4dnRPV3oyRWE5M0pCRXNQQTg3TCI7czo5OiJfcHJldmlvdXMiO2E6MTp7czozOiJ1cmwiO3M6NjA6Imh0dHA6Ly9nYXVudGxldC5icmF6aWxzb3V0aC5jbG91ZGFwcC5henVyZS5jb206ODAwMC9wcm9kdWN0cyI7fXM6NjoiX2ZsYXNoIjthOjI6e3M6Mzoib2xkIjthOjA6e31zOjM6Im5ldyI7YTowOnt9fX0=', 1750375794)
+GO
+INSERT [dbo].[sessions] ([id], [user_id], [ip_address], [user_agent], [payload], [last_activity]) VALUES (N'0Nyi7EyEObpjxLFMGdHoBeay6U6NuYxpsTgH43hx', NULL, N'187.43.130.230', N'Mozilla/5.0 (Linux; Android 10; K) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/137.0.0.0 Mobile Safari/537.36', N'YTozOntzOjY6Il90b2tlbiI7czo0MDoicnFoOHVqTnRwUDZ6UlhtSWVjREdtV0hXYnBhRGlIRnE4dXRBTFQwZyI7czo5OiJfcHJldmlvdXMiO2E6MTp7czozOiJ1cmwiO3M6NjA6Imh0dHA6Ly9nYXVudGxldC5icmF6aWxzb3V0aC5jbG91ZGFwcC5henVyZS5jb206ODAwMC9wcm9kdWN0cyI7fXM6NjoiX2ZsYXNoIjthOjI6e3M6Mzoib2xkIjthOjA6e31zOjM6Im5ldyI7YTowOnt9fX0=', 1750375370)
+GO
+INSERT [dbo].[sessions] ([id], [user_id], [ip_address], [user_agent], [payload], [last_activity]) VALUES (N'0pEI7rKFmajZf5Rouw3SBm8QxpYRY7tLRxl2SdLe', NULL, N'127.0.0.1', N'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/137.0.0.0 Safari/537.36', N'YTozOntzOjY6Il90b2tlbiI7czo0MDoiZ2tDZEpIOGMyTFVMOVBRWEpEVHZuY09IUzlsb282WDFyQ2NGVDRkZSI7czo5OiJfcHJldmlvdXMiO2E6MTp7czozOiJ1cmwiO3M6MzA6Imh0dHA6Ly9sb2NhbGhvc3Q6ODAwMC9wcm9kdWN0cyI7fXM6NjoiX2ZsYXNoIjthOjI6e3M6Mzoib2xkIjthOjA6e31zOjM6Im5ldyI7YTowOnt9fX0=', 1750366151)
+GO
+INSERT [dbo].[sessions] ([id], [user_id], [ip_address], [user_agent], [payload], [last_activity]) VALUES (N'0wRktEEzisIR5vB2snirZGcttC9u9AvLoTeDXhLA', NULL, N'187.43.130.230', N'Mozilla/5.0 (Linux; Android 10; K) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/137.0.0.0 Mobile Safari/537.36', N'YTozOntzOjY6Il90b2tlbiI7czo0MDoiS0NvVnFyNkNvZTlGNHFGSjQ2RXNMbEdrQ3haRUhseFdLYzBqTFFsMyI7czo5OiJfcHJldmlvdXMiO2E6MTp7czozOiJ1cmwiO3M6NjA6Imh0dHA6Ly9nYXVudGxldC5icmF6aWxzb3V0aC5jbG91ZGFwcC5henVyZS5jb206ODAwMC9wcm9kdWN0cyI7fXM6NjoiX2ZsYXNoIjthOjI6e3M6Mzoib2xkIjthOjA6e31zOjM6Im5ldyI7YTowOnt9fX0=', 1750375662)
+GO
+INSERT [dbo].[sessions] ([id], [user_id], [ip_address], [user_agent], [payload], [last_activity]) VALUES (N'15qn5mFThK4YXMRSHyQDsVLF3R8ZodEer0QKHA0N', NULL, N'131.255.37.4', N'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/137.0.0.0 Safari/537.36', N'YTozOntzOjY6Il90b2tlbiI7czo0MDoiT2hkNzg3cHplb0JJdHdXWDJHNlZwbU5CRksxRmt0NHdaUEd6Q3ZSZyI7czo5OiJfcHJldmlvdXMiO2E6MTp7czozOiJ1cmwiO3M6NjA6Imh0dHA6Ly9nYXVudGxldC5icmF6aWxzb3V0aC5jbG91ZGFwcC5henVyZS5jb206ODAwMC9wcm9kdWN0cyI7fXM6NjoiX2ZsYXNoIjthOjI6e3M6Mzoib2xkIjthOjA6e31zOjM6Im5ldyI7YTowOnt9fX0=', 1750424675)
+GO
+INSERT [dbo].[sessions] ([id], [user_id], [ip_address], [user_agent], [payload], [last_activity]) VALUES (N'1mvOzkxLY9rlpoiP0WxcdyvGNeVa1U0rM8NjiDkH', NULL, N'127.0.0.1', N'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/137.0.0.0 Safari/537.36', N'YTozOntzOjY6Il90b2tlbiI7czo0MDoiUnVGakdkT2dTalcwRDZzRUNCeUF1N0toVUllSTRINmxybXNKUE5neiI7czo5OiJfcHJldmlvdXMiO2E6MTp7czozOiJ1cmwiO3M6MzY6Imh0dHA6Ly9sb2NhbGhvc3Q6ODAwMC9wcm9kdWN0cy9zdG9jayI7fXM6NjoiX2ZsYXNoIjthOjI6e3M6Mzoib2xkIjthOjA6e31zOjM6Im5ldyI7YTowOnt9fX0=', 1750363453)
+GO
+INSERT [dbo].[sessions] ([id], [user_id], [ip_address], [user_agent], [payload], [last_activity]) VALUES (N'1VFS2AECuXdyiME9Q8rBX2zpdaufwccGEzhxN5GC', NULL, N'127.0.0.1', N'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/137.0.0.0 Safari/537.36', N'YTozOntzOjY6Il90b2tlbiI7czo0MDoiZ1F0bzBoU3ltT3BQeHdVcDlQczVDcGU3UTlDd2xCRm9GV1dzNDFReSI7czo5OiJfcHJldmlvdXMiO2E6MTp7czozOiJ1cmwiO3M6MzA6Imh0dHA6Ly9sb2NhbGhvc3Q6ODAwMC9wcm9kdWN0cyI7fXM6NjoiX2ZsYXNoIjthOjI6e3M6Mzoib2xkIjthOjA6e31zOjM6Im5ldyI7YTowOnt9fX0=', 1750358501)
+GO
+INSERT [dbo].[sessions] ([id], [user_id], [ip_address], [user_agent], [payload], [last_activity]) VALUES (N'1YC6VFc27ZiyzZf6s76Qv3YTUTb2gpnKLa2LMuQx', NULL, N'127.0.0.1', N'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/137.0.0.0 Safari/537.36', N'YTozOntzOjY6Il90b2tlbiI7czo0MDoicWVMSmxvVXNnZFIwRk9qTERYSE1kUmRWV3VlbXVYTW9NYWFwN0tjdiI7czo5OiJfcHJldmlvdXMiO2E6MTp7czozOiJ1cmwiO3M6MzA6Imh0dHA6Ly9sb2NhbGhvc3Q6ODAwMC9wcm9kdWN0cyI7fXM6NjoiX2ZsYXNoIjthOjI6e3M6Mzoib2xkIjthOjA6e31zOjM6Im5ldyI7YTowOnt9fX0=', 1750358856)
+GO
+INSERT [dbo].[sessions] ([id], [user_id], [ip_address], [user_agent], [payload], [last_activity]) VALUES (N'2g4ZF8yDgTzI9vKXKIaqfUDMIaMgNspYmUIgViQu', NULL, N'127.0.0.1', N'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/137.0.0.0 Safari/537.36', N'YTozOntzOjY6Il90b2tlbiI7czo0MDoiaVV4OWk0RW01bmNVdHo4QTd1a09abXRrZXlHelkzeVU3UFZId1pTSiI7czo5OiJfcHJldmlvdXMiO2E6MTp7czozOiJ1cmwiO3M6MzA6Imh0dHA6Ly9sb2NhbGhvc3Q6ODAwMC9wcm9kdWN0cyI7fXM6NjoiX2ZsYXNoIjthOjI6e3M6Mzoib2xkIjthOjA6e31zOjM6Im5ldyI7YTowOnt9fX0=', 1750358703)
+GO
+INSERT [dbo].[sessions] ([id], [user_id], [ip_address], [user_agent], [payload], [last_activity]) VALUES (N'2ofIZEhsPauSfAKsf907Z2CnGbFWyYLtCaFW3tXZ', NULL, N'127.0.0.1', N'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/137.0.0.0 Safari/537.36', N'YToyOntzOjY6Il90b2tlbiI7czo0MDoiN2RtbEMxY0d3VGtjaHYzUEg1TXlIeGdFR3htSGZMa3RSVmQ5dGpSTiI7czo2OiJfZmxhc2giO2E6Mjp7czozOiJvbGQiO2E6MDp7fXM6MzoibmV3IjthOjA6e319fQ==', 1750367324)
+GO
+INSERT [dbo].[sessions] ([id], [user_id], [ip_address], [user_agent], [payload], [last_activity]) VALUES (N'2qpuL4Du5AIFM3SyD7hPiQpAS8DwMMQWifEFEPcr', NULL, N'127.0.0.1', N'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/137.0.0.0 Safari/537.36', N'YTozOntzOjY6Il90b2tlbiI7czo0MDoiNHhhRGVBdDJHTjE4N1BXMWNOMm9VUVV2aGYzcVZLVlhoWXY2ZmFubyI7czo5OiJfcHJldmlvdXMiO2E6MTp7czozOiJ1cmwiO3M6MzA6Imh0dHA6Ly9sb2NhbGhvc3Q6ODAwMC9wcm9kdWN0cyI7fXM6NjoiX2ZsYXNoIjthOjI6e3M6Mzoib2xkIjthOjA6e31zOjM6Im5ldyI7YTowOnt9fX0=', 1750368415)
+GO
+INSERT [dbo].[sessions] ([id], [user_id], [ip_address], [user_agent], [payload], [last_activity]) VALUES (N'2xBc9l1oPCDm2FNb4FOpedIbBn2tylF8XBQVovdq', NULL, N'127.0.0.1', N'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/137.0.0.0 Safari/537.36', N'YToyOntzOjY6Il90b2tlbiI7czo0MDoiZXFmVWd5Q21HOHZnM1B2NDl6NGpyRkR3VHVOUHdtR2poU1c4NHFyeSI7czo2OiJfZmxhc2giO2E6Mjp7czozOiJvbGQiO2E6MDp7fXM6MzoibmV3IjthOjA6e319fQ==', 1750368449)
+GO
+INSERT [dbo].[sessions] ([id], [user_id], [ip_address], [user_agent], [payload], [last_activity]) VALUES (N'33Vz55eLqGVGDuNxLIdGD1cGc2OLvwEdlQyOEdS5', NULL, N'127.0.0.1', N'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/137.0.0.0 Safari/537.36 Edg/137.0.0.0', N'YTozOntzOjY6Il90b2tlbiI7czo0MDoielY4bGJQWVBDS202d0dKVzQ0RkpLenpTMEpiQ0R5VUhyZTRPOTdCTSI7czo5OiJfcHJldmlvdXMiO2E6MTp7czozOiJ1cmwiO3M6MzA6Imh0dHA6Ly9sb2NhbGhvc3Q6ODAwMC9wcm9kdWN0cyI7fXM6NjoiX2ZsYXNoIjthOjI6e3M6Mzoib2xkIjthOjA6e31zOjM6Im5ldyI7YTowOnt9fX0=', 1750373760)
+GO
+INSERT [dbo].[sessions] ([id], [user_id], [ip_address], [user_agent], [payload], [last_activity]) VALUES (N'3k6cOTyamAheph8kNadkOImMcPjAavzvwX10gH4u', NULL, N'127.0.0.1', N'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/137.0.0.0 Safari/537.36', N'YToyOntzOjY6Il90b2tlbiI7czo0MDoiSE9BV2RqTVFVT3JGRDFqSE9Jck43cmppcld3VWJRRHpHTXNobnExVyI7czo2OiJfZmxhc2giO2E6Mjp7czozOiJvbGQiO2E6MDp7fXM6MzoibmV3IjthOjA6e319fQ==', 1750364151)
+GO
+INSERT [dbo].[sessions] ([id], [user_id], [ip_address], [user_agent], [payload], [last_activity]) VALUES (N'3kcH9CXy3wvDuBtfOXKFVR6pW3XXfAwnl7aWMezr', NULL, N'127.0.0.1', N'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/137.0.0.0 Safari/537.36', N'YTozOntzOjY6Il90b2tlbiI7czo0MDoiWkE1R0xyZ1QzV0lsUEFYWXhKWUM1ZHZxemdWYzRrM0FzMkJMODRsWSI7czo5OiJfcHJldmlvdXMiO2E6MTp7czozOiJ1cmwiO3M6MzY6Imh0dHA6Ly9sb2NhbGhvc3Q6ODAwMC9wcm9kdWN0cy9zdG9jayI7fXM6NjoiX2ZsYXNoIjthOjI6e3M6Mzoib2xkIjthOjA6e31zOjM6Im5ldyI7YTowOnt9fX0=', 1750358800)
+GO
+INSERT [dbo].[sessions] ([id], [user_id], [ip_address], [user_agent], [payload], [last_activity]) VALUES (N'4h881C1iCcn4reE12BaDF9BRU2guDI8eWdfHjNCP', NULL, N'127.0.0.1', N'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/137.0.0.0 Safari/537.36', N'YTozOntzOjY6Il90b2tlbiI7czo0MDoiMllORjZQTEg2ZzdYazVRb1FHVmFKYVV4bWs5djhmM1hqNGNzOFN1QSI7czo5OiJfcHJldmlvdXMiO2E6MTp7czozOiJ1cmwiO3M6MzA6Imh0dHA6Ly9sb2NhbGhvc3Q6ODAwMC9wcm9kdWN0cyI7fXM6NjoiX2ZsYXNoIjthOjI6e3M6Mzoib2xkIjthOjA6e31zOjM6Im5ldyI7YTowOnt9fX0=', 1750366792)
+GO
+INSERT [dbo].[sessions] ([id], [user_id], [ip_address], [user_agent], [payload], [last_activity]) VALUES (N'4IUiyrOyqnI2wGIP8Au5tzvkZ8fLk1oZZSbIEGO8', NULL, N'127.0.0.1', N'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/137.0.0.0 Safari/537.36', N'YTozOntzOjY6Il90b2tlbiI7czo0MDoiT01BUW1Ba1VoVkwxcUFwM3QxWms1S1B5aGVUNTJYbEQ5amtxQXJQMCI7czo5OiJfcHJldmlvdXMiO2E6MTp7czozOiJ1cmwiO3M6MzA6Imh0dHA6Ly9sb2NhbGhvc3Q6ODAwMC9wcm9kdWN0cyI7fXM6NjoiX2ZsYXNoIjthOjI6e3M6Mzoib2xkIjthOjA6e31zOjM6Im5ldyI7YTowOnt9fX0=', 1750369209)
+GO
+INSERT [dbo].[sessions] ([id], [user_id], [ip_address], [user_agent], [payload], [last_activity]) VALUES (N'4nAgp72c88CVsmA3qiYTw2kKKmZVembpLn7nnvO2', NULL, N'127.0.0.1', N'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/137.0.0.0 Safari/537.36', N'YTozOntzOjY6Il90b2tlbiI7czo0MDoiaGtvNTJ5TGFuSXZaek8wemZtcE1lWkxEcXhlNEdwNE9BRlFwZDNPbCI7czo5OiJfcHJldmlvdXMiO2E6MTp7czozOiJ1cmwiO3M6MzA6Imh0dHA6Ly9sb2NhbGhvc3Q6ODAwMC9wcm9kdWN0cyI7fXM6NjoiX2ZsYXNoIjthOjI6e3M6Mzoib2xkIjthOjA6e31zOjM6Im5ldyI7YTowOnt9fX0=', 1750367194)
+GO
+INSERT [dbo].[sessions] ([id], [user_id], [ip_address], [user_agent], [payload], [last_activity]) VALUES (N'4OGqBOxpWRkwzWOeQXQsDeGcnCe1rvKNkO8q3N11', NULL, N'127.0.0.1', N'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/137.0.0.0 Safari/537.36', N'YTozOntzOjY6Il90b2tlbiI7czo0MDoiem9LdG1jY1dOb092ZHhJMUdqcXdYc0tmZFJNOTBaQ0ZYQmpjSFNWNyI7czo5OiJfcHJldmlvdXMiO2E6MTp7czozOiJ1cmwiO3M6MzA6Imh0dHA6Ly9sb2NhbGhvc3Q6ODAwMC9wcm9kdWN0cyI7fXM6NjoiX2ZsYXNoIjthOjI6e3M6Mzoib2xkIjthOjA6e31zOjM6Im5ldyI7YTowOnt9fX0=', 1750359604)
+GO
+INSERT [dbo].[sessions] ([id], [user_id], [ip_address], [user_agent], [payload], [last_activity]) VALUES (N'4OznY7BxKQybT9w7veLrYtlRqJiKrlE3ys6rDnr6', NULL, N'127.0.0.1', N'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/137.0.0.0 Safari/537.36', N'YToyOntzOjY6Il90b2tlbiI7czo0MDoiWll5Z0Uxc1NHRDBRY1dEVU5iZ3NFdzFkRlBlS1hQbGEwczRoZ0JxaCI7czo2OiJfZmxhc2giO2E6Mjp7czozOiJvbGQiO2E6MDp7fXM6MzoibmV3IjthOjA6e319fQ==', 1750358713)
+GO
+INSERT [dbo].[sessions] ([id], [user_id], [ip_address], [user_agent], [payload], [last_activity]) VALUES (N'4qt7J1Ckuoi8nNITIkEEWUCjWVaQGzTKCC9es04j', NULL, N'127.0.0.1', N'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/137.0.0.0 Safari/537.36', N'YTozOntzOjY6Il90b2tlbiI7czo0MDoiVWJQZFRNemxYYzNYSzBQNWU0NUJRSzFFMWhCZ0lFUE8wWmtUMzBFaCI7czo5OiJfcHJldmlvdXMiO2E6MTp7czozOiJ1cmwiO3M6MzY6Imh0dHA6Ly9sb2NhbGhvc3Q6ODAwMC9wcm9kdWN0cy9zdG9jayI7fXM6NjoiX2ZsYXNoIjthOjI6e3M6Mzoib2xkIjthOjA6e31zOjM6Im5ldyI7YTowOnt9fX0=', 1750358858)
+GO
+INSERT [dbo].[sessions] ([id], [user_id], [ip_address], [user_agent], [payload], [last_activity]) VALUES (N'5jc31AFiQm5Jhtg3UbZygRixpuYbMqb3U8nyQewq', NULL, N'131.255.37.4', N'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/137.0.0.0 Safari/537.36', N'YTozOntzOjY6Il90b2tlbiI7czo0MDoiTFc0ZHZvMGdlSHR6VHhLUGxRTmFIUTJpWjcweTB1aVo2cW13d3pHcSI7czo5OiJfcHJldmlvdXMiO2E6MTp7czozOiJ1cmwiO3M6NjA6Imh0dHA6Ly9nYXVudGxldC5icmF6aWxzb3V0aC5jbG91ZGFwcC5henVyZS5jb206ODAwMC9wcm9kdWN0cyI7fXM6NjoiX2ZsYXNoIjthOjI6e3M6Mzoib2xkIjthOjA6e31zOjM6Im5ldyI7YTowOnt9fX0=', 1750381453)
+GO
+INSERT [dbo].[sessions] ([id], [user_id], [ip_address], [user_agent], [payload], [last_activity]) VALUES (N'5ku48gCAPsIzvHATTqUCzMvymX6pv7S0E9vZMq9N', NULL, N'127.0.0.1', N'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/137.0.0.0 Safari/537.36', N'YToyOntzOjY6Il90b2tlbiI7czo0MDoielNmMTYwY3MxMXRxdEpLOW9iN2p1d3dCNFFJZkp5V2JhREh1VVNMbiI7czo2OiJfZmxhc2giO2E6Mjp7czozOiJvbGQiO2E6MDp7fXM6MzoibmV3IjthOjA6e319fQ==', 1750358712)
+GO
+INSERT [dbo].[sessions] ([id], [user_id], [ip_address], [user_agent], [payload], [last_activity]) VALUES (N'5PBkic7cmfUkX86nFmgKkvdOilzGOYSISJ5vdFW9', NULL, N'131.255.37.4', N'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/137.0.0.0 Safari/537.36', N'YTozOntzOjY6Il90b2tlbiI7czo0MDoiOUlDOTl1Y1JBVEZ0RnZFMjBOOWthaFN1YkdUU3pvVVc5c094TnpIVSI7czo5OiJfcHJldmlvdXMiO2E6MTp7czozOiJ1cmwiO3M6NjA6Imh0dHA6Ly9nYXVudGxldC5icmF6aWxzb3V0aC5jbG91ZGFwcC5henVyZS5jb206ODAwMC9wcm9kdWN0cyI7fXM6NjoiX2ZsYXNoIjthOjI6e3M6Mzoib2xkIjthOjA6e31zOjM6Im5ldyI7YTowOnt9fX0=', 1750381127)
+GO
+INSERT [dbo].[sessions] ([id], [user_id], [ip_address], [user_agent], [payload], [last_activity]) VALUES (N'66PqYplXTtBGUK3UbHHKwdZoF7wKljaR3OYWQHhH', NULL, N'187.43.130.230', N'Mozilla/5.0 (Linux; Android 10; K) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/137.0.0.0 Mobile Safari/537.36', N'YTozOntzOjY6Il90b2tlbiI7czo0MDoiaWNHeDRzNG5wWHd5QTRCUXAxRm9pOXRCUXdvZkV1YUFVck92Q0p3MyI7czo5OiJfcHJldmlvdXMiO2E6MTp7czozOiJ1cmwiO3M6NjA6Imh0dHA6Ly9nYXVudGxldC5icmF6aWxzb3V0aC5jbG91ZGFwcC5henVyZS5jb206ODAwMC9wcm9kdWN0cyI7fXM6NjoiX2ZsYXNoIjthOjI6e3M6Mzoib2xkIjthOjA6e31zOjM6Im5ldyI7YTowOnt9fX0=', 1750376012)
+GO
+INSERT [dbo].[sessions] ([id], [user_id], [ip_address], [user_agent], [payload], [last_activity]) VALUES (N'6R0Nqqz3dxoT1EaA3xtU1XFyoDFvHuqxd7Impp5v', NULL, N'187.43.130.230', N'Mozilla/5.0 (Linux; Android 10; K) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/137.0.0.0 Mobile Safari/537.36', N'YTozOntzOjY6Il90b2tlbiI7czo0MDoidkY1Um1iVDZNUmNDS3pNNWhtMFVzODVENFltT0V5cE9tQzNueG10QyI7czo5OiJfcHJldmlvdXMiO2E6MTp7czozOiJ1cmwiO3M6NjA6Imh0dHA6Ly9nYXVudGxldC5icmF6aWxzb3V0aC5jbG91ZGFwcC5henVyZS5jb206ODAwMC9wcm9kdWN0cyI7fXM6NjoiX2ZsYXNoIjthOjI6e3M6Mzoib2xkIjthOjA6e31zOjM6Im5ldyI7YTowOnt9fX0=', 1750375608)
+GO
+INSERT [dbo].[sessions] ([id], [user_id], [ip_address], [user_agent], [payload], [last_activity]) VALUES (N'6WC7bHMnJLMDs5nj4N3pZNT2wc3mlwjlIBtdCBAC', NULL, N'127.0.0.1', N'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/137.0.0.0 Safari/537.36', N'YTozOntzOjY6Il90b2tlbiI7czo0MDoibnVyQ1c1c0RrZ3BaZDVuODFhMVA3UmhYdEZGa2ZVSWY0WWZWejVKOCI7czo5OiJfcHJldmlvdXMiO2E6MTp7czozOiJ1cmwiO3M6MzA6Imh0dHA6Ly9sb2NhbGhvc3Q6ODAwMC9wcm9kdWN0cyI7fXM6NjoiX2ZsYXNoIjthOjI6e3M6Mzoib2xkIjthOjA6e31zOjM6Im5ldyI7YTowOnt9fX0=', 1750367769)
+GO
+INSERT [dbo].[sessions] ([id], [user_id], [ip_address], [user_agent], [payload], [last_activity]) VALUES (N'6yurQt0vWLrOSkbiApfTy5QR5pBWzBNqFFbmFqHx', NULL, N'177.40.7.226', N'Mozilla/5.0 (iPhone; CPU iPhone OS 18_5_0 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) CriOS/137.0.7151.107 Mobile/15E148 Safari/604.1', N'YToyOntzOjY6Il90b2tlbiI7czo0MDoiYmprcnRDemxzejNtaFVldzBBMWtxd214VnpMSFN3TVYxNlZMTzI4ZyI7czo2OiJfZmxhc2giO2E6Mjp7czozOiJvbGQiO2E6MDp7fXM6MzoibmV3IjthOjA6e319fQ==', 1750375978)
+GO
+INSERT [dbo].[sessions] ([id], [user_id], [ip_address], [user_agent], [payload], [last_activity]) VALUES (N'7waeNBzlKuEdrGg0lfxKUUsvkZLmtzOrvHx5GrYD', NULL, N'127.0.0.1', N'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/137.0.0.0 Safari/537.36', N'YTozOntzOjY6Il90b2tlbiI7czo0MDoiSXRoaXBkQUJMdXFDVkZLWHdtYVJBdTF6MTZMVUVtR2k1clA3Y0dwQyI7czo5OiJfcHJldmlvdXMiO2E6MTp7czozOiJ1cmwiO3M6MzA6Imh0dHA6Ly9sb2NhbGhvc3Q6ODAwMC9wcm9kdWN0cyI7fXM6NjoiX2ZsYXNoIjthOjI6e3M6Mzoib2xkIjthOjA6e31zOjM6Im5ldyI7YTowOnt9fX0=', 1750358828)
+GO
+INSERT [dbo].[sessions] ([id], [user_id], [ip_address], [user_agent], [payload], [last_activity]) VALUES (N'7xEv7BkyedIpxFokI3Lx7wkECTz8lRkepBbOuAHG', NULL, N'127.0.0.1', N'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/137.0.0.0 Safari/537.36', N'YToyOntzOjY6Il90b2tlbiI7czo0MDoic2xBdDdmMDAwZ0VDM2xJZ2RSUG9SWmhTUThSejF4VXhreHBTQk1ISCI7czo2OiJfZmxhc2giO2E6Mjp7czozOiJvbGQiO2E6MDp7fXM6MzoibmV3IjthOjA6e319fQ==', 1750363543)
+GO
+INSERT [dbo].[sessions] ([id], [user_id], [ip_address], [user_agent], [payload], [last_activity]) VALUES (N'8Sf0buqZVKHD5VKoG3D2h2Bni7GYzFo8SDZDj15C', NULL, N'127.0.0.1', N'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/137.0.0.0 Safari/537.36', N'YTozOntzOjY6Il90b2tlbiI7czo0MDoiZUVlaVYxbnIyQjRUNnV3cVNSb0ZKWXNBU2FER3dHNHA1UUphR2c2bCI7czo5OiJfcHJldmlvdXMiO2E6MTp7czozOiJ1cmwiO3M6MzA6Imh0dHA6Ly9sb2NhbGhvc3Q6ODAwMC9wcm9kdWN0cyI7fXM6NjoiX2ZsYXNoIjthOjI6e3M6Mzoib2xkIjthOjA6e31zOjM6Im5ldyI7YTowOnt9fX0=', 1750364038)
+GO
+INSERT [dbo].[sessions] ([id], [user_id], [ip_address], [user_agent], [payload], [last_activity]) VALUES (N'9Dg4lITtuCbZJJw7choOHeOqGF2tmxbBF8y8vHmN', NULL, N'172.249.48.66', N'Mozilla/5.0 (iPhone; CPU iPhone OS 18_5 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/18.5 Mobile/15E148 Safari/604.1', N'YTozOntzOjY6Il90b2tlbiI7czo0MDoickhEeEltUERoT01seks2SHhUdFhyc1lONkhweHNSN1lkMnBFNGNFOSI7czo5OiJfcHJldmlvdXMiO2E6MTp7czozOiJ1cmwiO3M6NjA6Imh0dHA6Ly9nYXVudGxldC5icmF6aWxzb3V0aC5jbG91ZGFwcC5henVyZS5jb206ODAwMC9wcm9kdWN0cyI7fXM6NjoiX2ZsYXNoIjthOjI6e3M6Mzoib2xkIjthOjA6e31zOjM6Im5ldyI7YTowOnt9fX0=', 1750375920)
+GO
+INSERT [dbo].[sessions] ([id], [user_id], [ip_address], [user_agent], [payload], [last_activity]) VALUES (N'9j0qPuiswM6XAqN6AqiZgciPYm8PmtGQ4IOIrjSO', NULL, N'127.0.0.1', N'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/137.0.0.0 Safari/537.36', N'YToyOntzOjY6Il90b2tlbiI7czo0MDoiMnM5NjdESkp1SkFjQXJTbWdUZmRWbDlpUFhISzk0cjMxUWk2WDU2cCI7czo2OiJfZmxhc2giO2E6Mjp7czozOiJvbGQiO2E6MDp7fXM6MzoibmV3IjthOjA6e319fQ==', 1750369693)
+GO
+INSERT [dbo].[sessions] ([id], [user_id], [ip_address], [user_agent], [payload], [last_activity]) VALUES (N'9LpI1ZtgnqUxHoX6TAXLdAcFySPyWnWYBKrrYS1d', NULL, N'187.43.130.230', N'Mozilla/5.0 (Linux; Android 10; K) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/137.0.0.0 Mobile Safari/537.36', N'YTozOntzOjY6Il90b2tlbiI7czo0MDoiSVZUNHhleVZzZnVRTnVyajhheHJsM0ZCNW1ndDJNVmlVU3M0WFN2eCI7czo5OiJfcHJldmlvdXMiO2E6MTp7czozOiJ1cmwiO3M6NjA6Imh0dHA6Ly9nYXVudGxldC5icmF6aWxzb3V0aC5jbG91ZGFwcC5henVyZS5jb206ODAwMC9wcm9kdWN0cyI7fXM6NjoiX2ZsYXNoIjthOjI6e3M6Mzoib2xkIjthOjA6e31zOjM6Im5ldyI7YTowOnt9fX0=', 1750375608)
+GO
+INSERT [dbo].[sessions] ([id], [user_id], [ip_address], [user_agent], [payload], [last_activity]) VALUES (N'Af0AhmH08KyT8D0pidge4uFYAeQcP7M4NHGd7ZJI', NULL, N'131.255.37.4', N'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/137.0.0.0 Safari/537.36', N'YToyOntzOjY6Il90b2tlbiI7czo0MDoidmVzd0VyZmdnSVhhTFkxanBnSHlvVHR1d1RFUU05b0psSGliMTM5WiI7czo2OiJfZmxhc2giO2E6Mjp7czozOiJvbGQiO2E6MDp7fXM6MzoibmV3IjthOjA6e319fQ==', 1750381144)
+GO
+INSERT [dbo].[sessions] ([id], [user_id], [ip_address], [user_agent], [payload], [last_activity]) VALUES (N'ASs9VSgLmkwvjz8EoMhkVs320LAs8kmMnW419TrS', NULL, N'127.0.0.1', N'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/137.0.0.0 Safari/537.36', N'YTozOntzOjY6Il90b2tlbiI7czo0MDoiSjF5d0M2dkJleUFOOGljY2ZZYUpZcmNSR2p1WVhNeDRDY2FKcVlxMCI7czo5OiJfcHJldmlvdXMiO2E6MTp7czozOiJ1cmwiO3M6MzA6Imh0dHA6Ly9sb2NhbGhvc3Q6ODAwMC9wcm9kdWN0cyI7fXM6NjoiX2ZsYXNoIjthOjI6e3M6Mzoib2xkIjthOjA6e31zOjM6Im5ldyI7YTowOnt9fX0=', 1750364955)
+GO
+INSERT [dbo].[sessions] ([id], [user_id], [ip_address], [user_agent], [payload], [last_activity]) VALUES (N'BeXzxjofRPvSzRpgPUcvsbVduD7d96HpZIjF2gT5', NULL, N'127.0.0.1', N'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/137.0.0.0 Safari/537.36', N'YToyOntzOjY6Il90b2tlbiI7czo0MDoiVTJvcU8wbGpBNVVCYTlyWkRNSmNKYVBXb3FTaUxRbmFIT0dZbFpkNyI7czo2OiJfZmxhc2giO2E6Mjp7czozOiJvbGQiO2E6MDp7fXM6MzoibmV3IjthOjA6e319fQ==', 1750358808)
+GO
+INSERT [dbo].[sessions] ([id], [user_id], [ip_address], [user_agent], [payload], [last_activity]) VALUES (N'BiBJRHHnDHgemBnrbBO4K4MNH4AN8vDij6xObczi', NULL, N'127.0.0.1', N'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/137.0.0.0 Safari/537.36', N'YToyOntzOjY6Il90b2tlbiI7czo0MDoiMWRFVlN0UlRyWVVJd0hRRk9zSWZObkVDbXBMSFdzaG85M21iQ1RLeCI7czo2OiJfZmxhc2giO2E6Mjp7czozOiJvbGQiO2E6MDp7fXM6MzoibmV3IjthOjA6e319fQ==', 1750367211)
+GO
+INSERT [dbo].[sessions] ([id], [user_id], [ip_address], [user_agent], [payload], [last_activity]) VALUES (N'BjLVKssMCMYvNHF88S6GtHPqUDZigrJVfofIWRTC', NULL, N'127.0.0.1', N'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/137.0.0.0 Safari/537.36', N'YTozOntzOjY6Il90b2tlbiI7czo0MDoic0R4dUdxT3hhRnNQWlM2aWFtNjR0UlMxTHB5RXVLdWVKSFVFTkl4VyI7czo5OiJfcHJldmlvdXMiO2E6MTp7czozOiJ1cmwiO3M6MzA6Imh0dHA6Ly9sb2NhbGhvc3Q6ODAwMC9wcm9kdWN0cyI7fXM6NjoiX2ZsYXNoIjthOjI6e3M6Mzoib2xkIjthOjA6e31zOjM6Im5ldyI7YTowOnt9fX0=', 1750364162)
+GO
+INSERT [dbo].[sessions] ([id], [user_id], [ip_address], [user_agent], [payload], [last_activity]) VALUES (N'BPqzldThbxE9hyim7nliGeN0NuCPZ4egimKD4tnr', NULL, N'127.0.0.1', N'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/137.0.0.0 Safari/537.36', N'YTozOntzOjY6Il90b2tlbiI7czo0MDoib3NCcW5mYno0bGF3T3UxTkk1dHcyMW9JWXk1c2haSUJPZEVjaTJvTCI7czo5OiJfcHJldmlvdXMiO2E6MTp7czozOiJ1cmwiO3M6MzA6Imh0dHA6Ly9sb2NhbGhvc3Q6ODAwMC9wcm9kdWN0cyI7fXM6NjoiX2ZsYXNoIjthOjI6e3M6Mzoib2xkIjthOjA6e31zOjM6Im5ldyI7YTowOnt9fX0=', 1750359606)
+GO
+INSERT [dbo].[sessions] ([id], [user_id], [ip_address], [user_agent], [payload], [last_activity]) VALUES (N'BTaFICZnbLmSUimPNbwJEpboeRx70c4yzRD5Wa4G', NULL, N'127.0.0.1', N'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/137.0.0.0 Safari/537.36', N'YTozOntzOjY6Il90b2tlbiI7czo0MDoiY0lvOEpzcGFDRHYxcjBvVk83cGl1V1RMQjNudWc0ZWpqMU5kOUVJUSI7czo5OiJfcHJldmlvdXMiO2E6MTp7czozOiJ1cmwiO3M6MzA6Imh0dHA6Ly9sb2NhbGhvc3Q6ODAwMC9wcm9kdWN0cyI7fXM6NjoiX2ZsYXNoIjthOjI6e3M6Mzoib2xkIjthOjA6e31zOjM6Im5ldyI7YTowOnt9fX0=', 1750367766)
+GO
+INSERT [dbo].[sessions] ([id], [user_id], [ip_address], [user_agent], [payload], [last_activity]) VALUES (N'c0x1COBaNWPBtJorRKhKkZTiGGKqM85efj9YpCyi', NULL, N'187.43.130.230', N'Mozilla/5.0 (Linux; Android 10; K) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/137.0.0.0 Mobile Safari/537.36', N'YTozOntzOjY6Il90b2tlbiI7czo0MDoiUzVNM1Q2OVB2VzU1Qnhqb1dsUFVjRGc2bDhmN01ManF1Z0RqemQ3aCI7czo5OiJfcHJldmlvdXMiO2E6MTp7czozOiJ1cmwiO3M6NjA6Imh0dHA6Ly9nYXVudGxldC5icmF6aWxzb3V0aC5jbG91ZGFwcC5henVyZS5jb206ODAwMC9wcm9kdWN0cyI7fXM6NjoiX2ZsYXNoIjthOjI6e3M6Mzoib2xkIjthOjA6e31zOjM6Im5ldyI7YTowOnt9fX0=', 1750375370)
+GO
+INSERT [dbo].[sessions] ([id], [user_id], [ip_address], [user_agent], [payload], [last_activity]) VALUES (N'cc859xyKfaDol754shqbVllmj7SzLOZx4O3XhWrb', NULL, N'127.0.0.1', N'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/137.0.0.0 Safari/537.36', N'YTozOntzOjY6Il90b2tlbiI7czo0MDoiTGVEdFQzeGhyTk1vb21UaUlFMHNxM3FuYlNSQVlrczRjOHBmdU5pUiI7czo5OiJfcHJldmlvdXMiO2E6MTp7czozOiJ1cmwiO3M6MzY6Imh0dHA6Ly9sb2NhbGhvc3Q6ODAwMC9wcm9kdWN0cy9zdG9jayI7fXM6NjoiX2ZsYXNoIjthOjI6e3M6Mzoib2xkIjthOjA6e31zOjM6Im5ldyI7YTowOnt9fX0=', 1750359603)
+GO
+INSERT [dbo].[sessions] ([id], [user_id], [ip_address], [user_agent], [payload], [last_activity]) VALUES (N'crsHeVPebUMu09h1IO0Gnj7cMDvNXcivECDHZDdw', NULL, N'127.0.0.1', N'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/137.0.0.0 Safari/537.36', N'YTozOntzOjY6Il90b2tlbiI7czo0MDoia2xQZklzOEtOZWJlazd5b2RzTThkaFlKbXNlazdNRllNbVRXVDN5RCI7czo5OiJfcHJldmlvdXMiO2E6MTp7czozOiJ1cmwiO3M6MzA6Imh0dHA6Ly9sb2NhbGhvc3Q6ODAwMC9wcm9kdWN0cyI7fXM6NjoiX2ZsYXNoIjthOjI6e3M6Mzoib2xkIjthOjA6e31zOjM6Im5ldyI7YTowOnt9fX0=', 1750367477)
+GO
+INSERT [dbo].[sessions] ([id], [user_id], [ip_address], [user_agent], [payload], [last_activity]) VALUES (N'CtHGrXzXsUP5USsPk2QlZ1fxY7oE2g0B5yGulISx', NULL, N'200.173.162.134', N'Mozilla/5.0 (Linux; Android 10; K) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/137.0.0.0 Mobile Safari/537.36', N'YTozOntzOjY6Il90b2tlbiI7czo0MDoibEJXckRGQ01mMkdod0VFWjdlUlcwcDBoR0U5ZUNMUUlIWUd2QU9NaSI7czo5OiJfcHJldmlvdXMiO2E6MTp7czozOiJ1cmwiO3M6NjA6Imh0dHA6Ly9nYXVudGxldC5icmF6aWxzb3V0aC5jbG91ZGFwcC5henVyZS5jb206ODAwMC9wcm9kdWN0cyI7fXM6NjoiX2ZsYXNoIjthOjI6e3M6Mzoib2xkIjthOjA6e31zOjM6Im5ldyI7YTowOnt9fX0=', 1750378377)
+GO
+INSERT [dbo].[sessions] ([id], [user_id], [ip_address], [user_agent], [payload], [last_activity]) VALUES (N'DDTxln6crH1KJYf7Uoyowul0w3GFvSKqA4mpfA3I', NULL, N'174.236.100.71', N'Mozilla/5.0 (iPhone; CPU iPhone OS 18_5 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/18.5 Mobile/15E148 Safari/604.1', N'YTozOntzOjY6Il90b2tlbiI7czo0MDoicVgweG8xODNIMzh0VmVsaVN3Q0R2MkZ1ZEhMWG5zSnBsZEdRZ3plQiI7czo5OiJfcHJldmlvdXMiO2E6MTp7czozOiJ1cmwiO3M6NjA6Imh0dHA6Ly9nYXVudGxldC5icmF6aWxzb3V0aC5jbG91ZGFwcC5henVyZS5jb206ODAwMC9wcm9kdWN0cyI7fXM6NjoiX2ZsYXNoIjthOjI6e3M6Mzoib2xkIjthOjA6e31zOjM6Im5ldyI7YTowOnt9fX0=', 1750378407)
+GO
+INSERT [dbo].[sessions] ([id], [user_id], [ip_address], [user_agent], [payload], [last_activity]) VALUES (N'dg2G1i8XBz4vlPrtOVL0o9p7rfwJUMzKC2vqWF2o', NULL, N'127.0.0.1', N'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/137.0.0.0 Safari/537.36', N'YTozOntzOjY6Il90b2tlbiI7czo0MDoiWHNXa1V6dWZ3UTk4RzhmRFM1b3RXNlBBMWE4cjY3dGJPczlnck5IViI7czo5OiJfcHJldmlvdXMiO2E6MTp7czozOiJ1cmwiO3M6MzA6Imh0dHA6Ly9sb2NhbGhvc3Q6ODAwMC9wcm9kdWN0cyI7fXM6NjoiX2ZsYXNoIjthOjI6e3M6Mzoib2xkIjthOjA6e31zOjM6Im5ldyI7YTowOnt9fX0=', 1750367213)
+GO
+INSERT [dbo].[sessions] ([id], [user_id], [ip_address], [user_agent], [payload], [last_activity]) VALUES (N'dlaYId5F1mEicam4wKhI3zkvG1ce2VWTnHlMx8xy', NULL, N'127.0.0.1', N'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/137.0.0.0 Safari/537.36', N'YTozOntzOjY6Il90b2tlbiI7czo0MDoidFI4RHMyN0ZnTXRUV3Iza3pNWGNrUmVpdTR4WGtLRUFzMzBXOGpKTSI7czo5OiJfcHJldmlvdXMiO2E6MTp7czozOiJ1cmwiO3M6MzA6Imh0dHA6Ly9sb2NhbGhvc3Q6ODAwMC9wcm9kdWN0cyI7fXM6NjoiX2ZsYXNoIjthOjI6e3M6Mzoib2xkIjthOjA6e31zOjM6Im5ldyI7YTowOnt9fX0=', 1750368416)
+GO
+INSERT [dbo].[sessions] ([id], [user_id], [ip_address], [user_agent], [payload], [last_activity]) VALUES (N'EcfXwwM6PL6HFFzA4hZVAaJsuL35Oe5YYQQEoZuw', NULL, N'127.0.0.1', N'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/137.0.0.0 Safari/537.36', N'YToyOntzOjY6Il90b2tlbiI7czo0MDoiNVdIeDB6ZEtoWjBscUJldEU0RENZc3lJVkxKeTZ0VVpnbGhmOU82QiI7czo2OiJfZmxhc2giO2E6Mjp7czozOiJvbGQiO2E6MDp7fXM6MzoibmV3IjthOjA6e319fQ==', 1750359639)
+GO
+INSERT [dbo].[sessions] ([id], [user_id], [ip_address], [user_agent], [payload], [last_activity]) VALUES (N'EFN8ZQcCFKYJdMSVJ4TBdAuMzw9r8ocl7bCJs9rt', NULL, N'127.0.0.1', N'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/137.0.0.0 Safari/537.36', N'YTozOntzOjY6Il90b2tlbiI7czo0MDoiRmZkQm9uSEh1aGRZZmZGY2FodnhpcVlIMVVXZ1FyMnpCd2puRzBiZSI7czo5OiJfcHJldmlvdXMiO2E6MTp7czozOiJ1cmwiO3M6MzY6Imh0dHA6Ly9sb2NhbGhvc3Q6ODAwMC9wcm9kdWN0cy9zdG9jayI7fXM6NjoiX2ZsYXNoIjthOjI6e3M6Mzoib2xkIjthOjA6e31zOjM6Im5ldyI7YTowOnt9fX0=', 1750358503)
+GO
+INSERT [dbo].[sessions] ([id], [user_id], [ip_address], [user_agent], [payload], [last_activity]) VALUES (N'eQHkUPT0y3yUUUsTL8mUnzezO5Us9dKysagQwIiH', NULL, N'172.249.48.66', N'Mozilla/5.0 (iPhone; CPU iPhone OS 18_5 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/18.5 Mobile/15E148 Safari/604.1', N'YTozOntzOjY6Il90b2tlbiI7czo0MDoianFEdGNqQjVUSHlteGRZUXY2SUVUbXc3UVNteGpQdnNSV01BU0JyTSI7czo5OiJfcHJldmlvdXMiO2E6MTp7czozOiJ1cmwiO3M6NjA6Imh0dHA6Ly9nYXVudGxldC5icmF6aWxzb3V0aC5jbG91ZGFwcC5henVyZS5jb206ODAwMC9wcm9kdWN0cyI7fXM6NjoiX2ZsYXNoIjthOjI6e3M6Mzoib2xkIjthOjA6e31zOjM6Im5ldyI7YTowOnt9fX0=', 1750375759)
+GO
+INSERT [dbo].[sessions] ([id], [user_id], [ip_address], [user_agent], [payload], [last_activity]) VALUES (N'Etb8yhmTzFFLO36ix7Ne78HUMpftCZrVxuz6Eb5A', NULL, N'174.236.100.71', N'Mozilla/5.0 (iPhone; CPU iPhone OS 18_5 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/18.5 Mobile/15E148 Safari/604.1', N'YTozOntzOjY6Il90b2tlbiI7czo0MDoiMjRWcGZlSVZhU1JJbzRhVjdsQXZRMW9tNkNiUU9FUE5WT1oxem16ZSI7czo5OiJfcHJldmlvdXMiO2E6MTp7czozOiJ1cmwiO3M6NjA6Imh0dHA6Ly9nYXVudGxldC5icmF6aWxzb3V0aC5jbG91ZGFwcC5henVyZS5jb206ODAwMC9wcm9kdWN0cyI7fXM6NjoiX2ZsYXNoIjthOjI6e3M6Mzoib2xkIjthOjA6e31zOjM6Im5ldyI7YTowOnt9fX0=', 1750378407)
+GO
+INSERT [dbo].[sessions] ([id], [user_id], [ip_address], [user_agent], [payload], [last_activity]) VALUES (N'EtGgisULU6FKRq0V4PAQ6ykTRz8jRc4aW3926MhO', NULL, N'172.249.48.66', N'Mozilla/5.0 (iPhone; CPU iPhone OS 18_5 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/18.5 Mobile/15E148 Safari/604.1', N'YTozOntzOjY6Il90b2tlbiI7czo0MDoiVGRmbUw3Mm5OeG5JcEFMOW4wZGJ5QnhmTnBQc2gzOGJKcjBRV2VsTyI7czo5OiJfcHJldmlvdXMiO2E6MTp7czozOiJ1cmwiO3M6NjA6Imh0dHA6Ly9nYXVudGxldC5icmF6aWxzb3V0aC5jbG91ZGFwcC5henVyZS5jb206ODAwMC9wcm9kdWN0cyI7fXM6NjoiX2ZsYXNoIjthOjI6e3M6Mzoib2xkIjthOjA6e31zOjM6Im5ldyI7YTowOnt9fX0=', 1750375759)
+GO
+INSERT [dbo].[sessions] ([id], [user_id], [ip_address], [user_agent], [payload], [last_activity]) VALUES (N'eXxhnVJyWgC1GSR8rIGQ0CZ88SMY7IovLBf56Nny', NULL, N'172.249.48.66', N'Mozilla/5.0 (iPhone; CPU iPhone OS 18_5 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/18.5 Mobile/15E148 Safari/604.1', N'YToyOntzOjY6Il90b2tlbiI7czo0MDoiSHBDSGNsQ2pwc0dJbFVPUXQwOE55YUl4UmxxaVBJV1VpR2NrcVlPZCI7czo2OiJfZmxhc2giO2E6Mjp7czozOiJvbGQiO2E6MDp7fXM6MzoibmV3IjthOjA6e319fQ==', 1750375920)
+GO
+INSERT [dbo].[sessions] ([id], [user_id], [ip_address], [user_agent], [payload], [last_activity]) VALUES (N'f6tJI7HEggqNCJq9ao5OBcv4sKYcO60c3dFvY1VU', NULL, N'127.0.0.1', N'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/137.0.0.0 Safari/537.36', N'YTozOntzOjY6Il90b2tlbiI7czo0MDoicURmcThvRzBmN2VlUVlLVE1WcVNIU1VBT3psc2NYajV0THVaR1hQYSI7czo5OiJfcHJldmlvdXMiO2E6MTp7czozOiJ1cmwiO3M6MzA6Imh0dHA6Ly9sb2NhbGhvc3Q6ODAwMC9wcm9kdWN0cyI7fXM6NjoiX2ZsYXNoIjthOjI6e3M6Mzoib2xkIjthOjA6e31zOjM6Im5ldyI7YTowOnt9fX0=', 1750369626)
+GO
+INSERT [dbo].[sessions] ([id], [user_id], [ip_address], [user_agent], [payload], [last_activity]) VALUES (N'FAYy0DS2NjQgxXFd7sIwP6Hea1zEKzQFDGx5Uw4s', NULL, N'200.173.162.134', N'Mozilla/5.0 (Linux; Android 10; K) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/137.0.0.0 Mobile Safari/537.36', N'YTozOntzOjY6Il90b2tlbiI7czo0MDoiTldsRnhPU0J1a0NiM3J5UFlValg2VzA3cmNsOElZV3ZaZ3E0M2VvUiI7czo5OiJfcHJldmlvdXMiO2E6MTp7czozOiJ1cmwiO3M6NjA6Imh0dHA6Ly9nYXVudGxldC5icmF6aWxzb3V0aC5jbG91ZGFwcC5henVyZS5jb206ODAwMC9wcm9kdWN0cyI7fXM6NjoiX2ZsYXNoIjthOjI6e3M6Mzoib2xkIjthOjA6e31zOjM6Im5ldyI7YTowOnt9fX0=', 1750378378)
+GO
+INSERT [dbo].[sessions] ([id], [user_id], [ip_address], [user_agent], [payload], [last_activity]) VALUES (N'fbys48GQycpy3hlA98HjgqH9UM8KX81ayddVpp20', NULL, N'127.0.0.1', N'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/137.0.0.0 Safari/537.36', N'YToyOntzOjY6Il90b2tlbiI7czo0MDoidHIyVmtTZHFCZUx5S1Y3SG4zR04xaE1yT2dBRnFDeVY0dUQ4ZHpLMyI7czo2OiJfZmxhc2giO2E6Mjp7czozOiJvbGQiO2E6MDp7fXM6MzoibmV3IjthOjA6e319fQ==', 1750358515)
+GO
+INSERT [dbo].[sessions] ([id], [user_id], [ip_address], [user_agent], [payload], [last_activity]) VALUES (N'fPhAUUslNWQKU8MBDM7LtgnknVqFnpBh7VV1YqrE', NULL, N'127.0.0.1', N'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/137.0.0.0 Safari/537.36', N'YTozOntzOjY6Il90b2tlbiI7czo0MDoiaXZERmZ2cTRqTEh0STF3Q0J0cWpXYXdSUHN2STRYOTV3bEVvZjhhdSI7czo5OiJfcHJldmlvdXMiO2E6MTp7czozOiJ1cmwiO3M6MzA6Imh0dHA6Ly9sb2NhbGhvc3Q6ODAwMC9wcm9kdWN0cyI7fXM6NjoiX2ZsYXNoIjthOjI6e3M6Mzoib2xkIjthOjA6e31zOjM6Im5ldyI7YTowOnt9fX0=', 1750364956)
+GO
+INSERT [dbo].[sessions] ([id], [user_id], [ip_address], [user_agent], [payload], [last_activity]) VALUES (N'gJzTpDhDNA23Rf5sI9QbUsb4pnoLJ1LAEQY1bbGk', NULL, N'127.0.0.1', N'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/137.0.0.0 Safari/537.36', N'YToyOntzOjY6Il90b2tlbiI7czo0MDoieUNRclNjbUJ6RTZDNUw0QVhHMmhzTHRpM0lNUlRLQWV2OUp3ZUNGYyI7czo2OiJfZmxhc2giO2E6Mjp7czozOiJvbGQiO2E6MDp7fXM6MzoibmV3IjthOjA6e319fQ==', 1750358633)
+GO
+INSERT [dbo].[sessions] ([id], [user_id], [ip_address], [user_agent], [payload], [last_activity]) VALUES (N'Gk8D6ohmIv5WKJapuIXEO5oBVt4KKG91Bw5pTfpm', NULL, N'127.0.0.1', N'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/137.0.0.0 Safari/537.36', N'YToyOntzOjY6Il90b2tlbiI7czo0MDoiVUgyYlNsNTYxcjNwQ2pUM2JEakFxTVJ1UTdJQ0lRdkVwNWZUZkkyUiI7czo2OiJfZmxhc2giO2E6Mjp7czozOiJvbGQiO2E6MDp7fXM6MzoibmV3IjthOjA6e319fQ==', 1750367506)
+GO
+INSERT [dbo].[sessions] ([id], [user_id], [ip_address], [user_agent], [payload], [last_activity]) VALUES (N'gxTCTtm2B0BlVGmZd7BnMwmu7F45FDQga2lMc1wn', NULL, N'127.0.0.1', N'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/137.0.0.0 Safari/537.36', N'YTozOntzOjY6Il90b2tlbiI7czo0MDoiYmVneW9RWDE4aG1mQTBxZ2VYOGhyN0lCQ1ZQODBmTUJpNzlPbHF3byI7czo5OiJfcHJldmlvdXMiO2E6MTp7czozOiJ1cmwiO3M6MzA6Imh0dHA6Ly9sb2NhbGhvc3Q6ODAwMC9wcm9kdWN0cyI7fXM6NjoiX2ZsYXNoIjthOjI6e3M6Mzoib2xkIjthOjA6e31zOjM6Im5ldyI7YTowOnt9fX0=', 1750367190)
+GO
+INSERT [dbo].[sessions] ([id], [user_id], [ip_address], [user_agent], [payload], [last_activity]) VALUES (N'hd2bpqshqqG2l5YCDKT783pJiKNN7f6aju8jDCPJ', NULL, N'127.0.0.1', N'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/137.0.0.0 Safari/537.36', N'YTozOntzOjY6Il90b2tlbiI7czo0MDoidjU0SmRPamVWZEZRN05Za1k3ZEYyQXBrWkdJMkFnNXhkamltNWoydiI7czo5OiJfcHJldmlvdXMiO2E6MTp7czozOiJ1cmwiO3M6MzY6Imh0dHA6Ly9sb2NhbGhvc3Q6ODAwMC9wcm9kdWN0cy9zdG9jayI7fXM6NjoiX2ZsYXNoIjthOjI6e3M6Mzoib2xkIjthOjA6e31zOjM6Im5ldyI7YTowOnt9fX0=', 1750358799)
+GO
+INSERT [dbo].[sessions] ([id], [user_id], [ip_address], [user_agent], [payload], [last_activity]) VALUES (N'hGpCnfMQJl45VKHtqZUKdGHuYgnKWgWkJadJnu76', NULL, N'127.0.0.1', N'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/137.0.0.0 Safari/537.36', N'YTozOntzOjY6Il90b2tlbiI7czo0MDoiMGZ0WDJrS0I0V0pVSmhhSWRkR2tpejRrZE9TRHJ6MHZEdkVoSFJGMiI7czo5OiJfcHJldmlvdXMiO2E6MTp7czozOiJ1cmwiO3M6MzA6Imh0dHA6Ly9sb2NhbGhvc3Q6ODAwMC9wcm9kdWN0cyI7fXM6NjoiX2ZsYXNoIjthOjI6e3M6Mzoib2xkIjthOjA6e31zOjM6Im5ldyI7YTowOnt9fX0=', 1750367508)
+GO
+INSERT [dbo].[sessions] ([id], [user_id], [ip_address], [user_agent], [payload], [last_activity]) VALUES (N'hhPhakWJlOnlf9NIbwakWwbFjTuIn305HxoOjXZ4', NULL, N'127.0.0.1', N'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/137.0.0.0 Safari/537.36', N'YToyOntzOjY6Il90b2tlbiI7czo0MDoibEhSMTdnMHpwc3ZnVkVRaE9CYlRxT252WUhtMkoxdXk4S2dzMExoUyI7czo2OiJfZmxhc2giO2E6Mjp7czozOiJvbGQiO2E6MDp7fXM6MzoibmV3IjthOjA6e319fQ==', 1750363525)
+GO
+INSERT [dbo].[sessions] ([id], [user_id], [ip_address], [user_agent], [payload], [last_activity]) VALUES (N'HR86olSh8Pp2RTX85mMNVfzYta376hI2eYeTtHda', NULL, N'127.0.0.1', N'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/137.0.0.0 Safari/537.36', N'YTozOntzOjY6Il90b2tlbiI7czo0MDoiWEw5SGFSZDZ5V0ZHbk8wMXhqTGpidzR3dXJVckcydmFKUVVlZGhEZyI7czo5OiJfcHJldmlvdXMiO2E6MTp7czozOiJ1cmwiO3M6MzA6Imh0dHA6Ly9sb2NhbGhvc3Q6ODAwMC9wcm9kdWN0cyI7fXM6NjoiX2ZsYXNoIjthOjI6e3M6Mzoib2xkIjthOjA6e31zOjM6Im5ldyI7YTowOnt9fX0=', 1750369695)
+GO
+INSERT [dbo].[sessions] ([id], [user_id], [ip_address], [user_agent], [payload], [last_activity]) VALUES (N'HRNkJ0wFsI3apf4PIK6F5Mj6jo3VMd4xreQJhHBF', NULL, N'127.0.0.1', N'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/137.0.0.0 Safari/537.36', N'YTozOntzOjY6Il90b2tlbiI7czo0MDoiblJyUGFtSWk1OWVQOVJjVGRaSjlZNjgySzJvQzdEbjVNV0FyZFQyaiI7czo5OiJfcHJldmlvdXMiO2E6MTp7czozOiJ1cmwiO3M6MzA6Imh0dHA6Ly9sb2NhbGhvc3Q6ODAwMC9wcm9kdWN0cyI7fXM6NjoiX2ZsYXNoIjthOjI6e3M6Mzoib2xkIjthOjA6e31zOjM6Im5ldyI7YTowOnt9fX0=', 1750364037)
+GO
+INSERT [dbo].[sessions] ([id], [user_id], [ip_address], [user_agent], [payload], [last_activity]) VALUES (N'hX9DsiQhW3MmO5QYwaENLxMVRQ2IspauihCx2jxZ', NULL, N'127.0.0.1', N'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/137.0.0.0 Safari/537.36', N'YTozOntzOjY6Il90b2tlbiI7czo0MDoiaEhFSDNNcVZ2cXFFSjRoaWlOTkhnWk9yd1NYNWhLUjJjT1A1VDhodyI7czo5OiJfcHJldmlvdXMiO2E6MTp7czozOiJ1cmwiO3M6MzA6Imh0dHA6Ly9sb2NhbGhvc3Q6ODAwMC9wcm9kdWN0cyI7fXM6NjoiX2ZsYXNoIjthOjI6e3M6Mzoib2xkIjthOjA6e31zOjM6Im5ldyI7YTowOnt9fX0=', 1750358857)
+GO
+INSERT [dbo].[sessions] ([id], [user_id], [ip_address], [user_agent], [payload], [last_activity]) VALUES (N'I8qUsX6v1mCE3VFPAEhqEPDxT6nhoqjbCkReDO9O', NULL, N'187.43.130.230', N'Mozilla/5.0 (Linux; Android 10; K) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/137.0.0.0 Mobile Safari/537.36', N'YTozOntzOjY6Il90b2tlbiI7czo0MDoia3J5bVBNV2drVWo2aGNsMjhIbGVOekY4Um5MQ3BlUmU1SElIQmdqUSI7czo5OiJfcHJldmlvdXMiO2E6MTp7czozOiJ1cmwiO3M6NjA6Imh0dHA6Ly9nYXVudGxldC5icmF6aWxzb3V0aC5jbG91ZGFwcC5henVyZS5jb206ODAwMC9wcm9kdWN0cyI7fXM6NjoiX2ZsYXNoIjthOjI6e3M6Mzoib2xkIjthOjA6e31zOjM6Im5ldyI7YTowOnt9fX0=', 1750375694)
+GO
+INSERT [dbo].[sessions] ([id], [user_id], [ip_address], [user_agent], [payload], [last_activity]) VALUES (N'idyMlrnbXik5QNglIL7Rp6JHRBWqBw1sxb3eloIS', NULL, N'127.0.0.1', N'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/137.0.0.0 Safari/537.36', N'YTozOntzOjY6Il90b2tlbiI7czo0MDoiaVJGOE5Kc2NRMnlzUnBSRHFNR2hLa1NhRU1mSnVOT2VRVnhGMEpERyI7czo5OiJfcHJldmlvdXMiO2E6MTp7czozOiJ1cmwiO3M6MzA6Imh0dHA6Ly9sb2NhbGhvc3Q6ODAwMC9wcm9kdWN0cyI7fXM6NjoiX2ZsYXNoIjthOjI6e3M6Mzoib2xkIjthOjA6e31zOjM6Im5ldyI7YTowOnt9fX0=', 1750367768)
+GO
+INSERT [dbo].[sessions] ([id], [user_id], [ip_address], [user_agent], [payload], [last_activity]) VALUES (N'INobCkZc21o3BjQ0lAqZ0BakLUusnBPXhlwnGPLq', NULL, N'127.0.0.1', N'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/137.0.0.0 Safari/537.36', N'YTozOntzOjY6Il90b2tlbiI7czo0MDoiek1KeHZEcTlnaFpWdVpFZUg5TzlWcnUxcHRGVVhKSHhldUg2cGhnRiI7czo5OiJfcHJldmlvdXMiO2E6MTp7czozOiJ1cmwiO3M6MzY6Imh0dHA6Ly9sb2NhbGhvc3Q6ODAwMC9wcm9kdWN0cy9zdG9jayI7fXM6NjoiX2ZsYXNoIjthOjI6e3M6Mzoib2xkIjthOjA6e31zOjM6Im5ldyI7YTowOnt9fX0=', 1750358502)
+GO
+INSERT [dbo].[sessions] ([id], [user_id], [ip_address], [user_agent], [payload], [last_activity]) VALUES (N'ioyqbnfYFGBagiBSTDTJnz2rbYAr5nhDdbJjP4TG', NULL, N'127.0.0.1', N'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/137.0.0.0 Safari/537.36', N'YTozOntzOjY6Il90b2tlbiI7czo0MDoielZhYmVZempjdnJQTEMyMjdIVnJhbkRIbEVoUWV0aGRRV0lvR2J1RCI7czo5OiJfcHJldmlvdXMiO2E6MTp7czozOiJ1cmwiO3M6MzY6Imh0dHA6Ly9sb2NhbGhvc3Q6ODAwMC9wcm9kdWN0cy9zdG9jayI7fXM6NjoiX2ZsYXNoIjthOjI6e3M6Mzoib2xkIjthOjA6e31zOjM6Im5ldyI7YTowOnt9fX0=', 1750358617)
+GO
+INSERT [dbo].[sessions] ([id], [user_id], [ip_address], [user_agent], [payload], [last_activity]) VALUES (N'IX7LzckaZz9bNVl33bflL7wJekEwzr8RplZ6Tl1r', NULL, N'187.43.130.230', N'Mozilla/5.0 (Linux; Android 10; K) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/137.0.0.0 Mobile Safari/537.36', N'YTozOntzOjY6Il90b2tlbiI7czo0MDoiMVA5U1lFcUxWeWJNZ3h1eGFDbFJTSHRXNFBibHNOdWVYb0ZvREFnUSI7czo5OiJfcHJldmlvdXMiO2E6MTp7czozOiJ1cmwiO3M6NjA6Imh0dHA6Ly9nYXVudGxldC5icmF6aWxzb3V0aC5jbG91ZGFwcC5henVyZS5jb206ODAwMC9wcm9kdWN0cyI7fXM6NjoiX2ZsYXNoIjthOjI6e3M6Mzoib2xkIjthOjA6e31zOjM6Im5ldyI7YTowOnt9fX0=', 1750375968)
+GO
+INSERT [dbo].[sessions] ([id], [user_id], [ip_address], [user_agent], [payload], [last_activity]) VALUES (N'JlWf321Q8AUMrkGl4Zsn2RYQ70SsnUptcRbyz8S4', NULL, N'127.0.0.1', N'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/137.0.0.0 Safari/537.36', N'YTozOntzOjY6Il90b2tlbiI7czo0MDoibmFlVnR1UVFMTXl3dUlHWWcySEkxT2M5WVB3WHBGd3hwOVR6d2pvNCI7czo5OiJfcHJldmlvdXMiO2E6MTp7czozOiJ1cmwiO3M6MzY6Imh0dHA6Ly9sb2NhbGhvc3Q6ODAwMC9wcm9kdWN0cy9zdG9jayI7fXM6NjoiX2ZsYXNoIjthOjI6e3M6Mzoib2xkIjthOjA6e31zOjM6Im5ldyI7YTowOnt9fX0=', 1750358619)
+GO
+INSERT [dbo].[sessions] ([id], [user_id], [ip_address], [user_agent], [payload], [last_activity]) VALUES (N'JMDyMsbGFLWYITUtuSqWAbofWARsQ4KK0R8ye8lg', NULL, N'127.0.0.1', N'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/137.0.0.0 Safari/537.36', N'YTozOntzOjY6Il90b2tlbiI7czo0MDoiZmM1a2lOdlVwaTRBaVpMRGJWTnFDWEtBaDdVVkVxeDVibGcxVVlFQiI7czo5OiJfcHJldmlvdXMiO2E6MTp7czozOiJ1cmwiO3M6MzA6Imh0dHA6Ly9sb2NhbGhvc3Q6ODAwMC9wcm9kdWN0cyI7fXM6NjoiX2ZsYXNoIjthOjI6e3M6Mzoib2xkIjthOjA6e31zOjM6Im5ldyI7YTowOnt9fX0=', 1750366790)
+GO
+INSERT [dbo].[sessions] ([id], [user_id], [ip_address], [user_agent], [payload], [last_activity]) VALUES (N'jQAqx5EqsZsLx5LZ9bB0RTT5gIG43eEE0aeCk4Hu', NULL, N'131.255.37.4', N'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/137.0.0.0 Safari/537.36', N'YTozOntzOjY6Il90b2tlbiI7czo0MDoiU2FxeGVVc3FLWnhYM3hGazZLajZDY3BXczZrcDRoUTM4RUlWV3BseiI7czo5OiJfcHJldmlvdXMiO2E6MTp7czozOiJ1cmwiO3M6NjA6Imh0dHA6Ly9nYXVudGxldC5icmF6aWxzb3V0aC5jbG91ZGFwcC5henVyZS5jb206ODAwMC9wcm9kdWN0cyI7fXM6NjoiX2ZsYXNoIjthOjI6e3M6Mzoib2xkIjthOjA6e31zOjM6Im5ldyI7YTowOnt9fX0=', 1750424635)
+GO
+INSERT [dbo].[sessions] ([id], [user_id], [ip_address], [user_agent], [payload], [last_activity]) VALUES (N'ju036cneu1rlJkmBJVtg5Xt53O5fhMXhNRwjvOE4', NULL, N'127.0.0.1', N'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/137.0.0.0 Safari/537.36', N'YTozOntzOjY6Il90b2tlbiI7czo0MDoiUFFwWHQ0ZWZZQTI3VkNPUXRRbUxlYTF5SGgwU2s3MGU4TGZ4UlRmMCI7czo5OiJfcHJldmlvdXMiO2E6MTp7czozOiJ1cmwiO3M6MzA6Imh0dHA6Ly9sb2NhbGhvc3Q6ODAwMC9wcm9kdWN0cyI7fXM6NjoiX2ZsYXNoIjthOjI6e3M6Mzoib2xkIjthOjA6e31zOjM6Im5ldyI7YTowOnt9fX0=', 1750365278)
+GO
+INSERT [dbo].[sessions] ([id], [user_id], [ip_address], [user_agent], [payload], [last_activity]) VALUES (N'jXYVB3KSO0Ynwxyglw7swLb9eZrsMM2TyaVVx3CX', NULL, N'127.0.0.1', N'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/137.0.0.0 Safari/537.36', N'YTozOntzOjY6Il90b2tlbiI7czo0MDoiZGlOUjJYRDl5UFlKSEZCTUJwTWNkRXhGN3IzdlQ5aTZGazdIc0ZtNyI7czo5OiJfcHJldmlvdXMiO2E6MTp7czozOiJ1cmwiO3M6MzA6Imh0dHA6Ly9sb2NhbGhvc3Q6ODAwMC9wcm9kdWN0cyI7fXM6NjoiX2ZsYXNoIjthOjI6e3M6Mzoib2xkIjthOjA6e31zOjM6Im5ldyI7YTowOnt9fX0=', 1750363454)
+GO
+INSERT [dbo].[sessions] ([id], [user_id], [ip_address], [user_agent], [payload], [last_activity]) VALUES (N'kQVcJrKRPcQpwBUx667GhwsN9jljGKwLTF2czrA7', NULL, N'127.0.0.1', N'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/137.0.0.0 Safari/537.36', N'YToyOntzOjY6Il90b2tlbiI7czo0MDoiSnlnTndmWk5ad0ZvdmtHNUFzNGh4TW9pTVdlUGJ4cmpTYW0wcTEyQyI7czo2OiJfZmxhc2giO2E6Mjp7czozOiJvbGQiO2E6MDp7fXM6MzoibmV3IjthOjA6e319fQ==', 1750367325)
+GO
+INSERT [dbo].[sessions] ([id], [user_id], [ip_address], [user_agent], [payload], [last_activity]) VALUES (N'KSKQUkmXtSXD6zHQaXaBQ0De9DHF7vFdWctn527k', NULL, N'127.0.0.1', N'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/137.0.0.0 Safari/537.36 Edg/137.0.0.0', N'YTozOntzOjY6Il90b2tlbiI7czo0MDoielB0ZWR1RVp3ZjQ4RnVvYjVONXZEYVlvWll3bVZoNVdUN3h6RUtTSiI7czo5OiJfcHJldmlvdXMiO2E6MTp7czozOiJ1cmwiO3M6MzA6Imh0dHA6Ly9sb2NhbGhvc3Q6ODAwMC9wcm9kdWN0cyI7fXM6NjoiX2ZsYXNoIjthOjI6e3M6Mzoib2xkIjthOjA6e31zOjM6Im5ldyI7YTowOnt9fX0=', 1750373761)
+GO
+INSERT [dbo].[sessions] ([id], [user_id], [ip_address], [user_agent], [payload], [last_activity]) VALUES (N'KvzFFm9toTHG76sUUDaCB8Eo4ii7JZxOn0xsWnWT', NULL, N'127.0.0.1', N'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/137.0.0.0 Safari/537.36', N'YTozOntzOjY6Il90b2tlbiI7czo0MDoiN3c1TW1XY3B2REpWV092Tk13Wm1yWGJkREVReHJoQlFxV1Q4QkNQTiI7czo5OiJfcHJldmlvdXMiO2E6MTp7czozOiJ1cmwiO3M6MzA6Imh0dHA6Ly9sb2NhbGhvc3Q6ODAwMC9wcm9kdWN0cyI7fXM6NjoiX2ZsYXNoIjthOjI6e3M6Mzoib2xkIjthOjA6e31zOjM6Im5ldyI7YTowOnt9fX0=', 1750366149)
+GO
+INSERT [dbo].[sessions] ([id], [user_id], [ip_address], [user_agent], [payload], [last_activity]) VALUES (N'KxSqDz5Y0LV8uG90XaMopdyYw4iIQi2zJ1YZMG8T', NULL, N'127.0.0.1', N'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/137.0.0.0 Safari/537.36', N'YTozOntzOjY6Il90b2tlbiI7czo0MDoiTTE0MTdtbEtReEFUemN5SXJJZ1A0WEFCQWpCRlkwVTFyT284djE5UyI7czo5OiJfcHJldmlvdXMiO2E6MTp7czozOiJ1cmwiO3M6MzY6Imh0dHA6Ly9sb2NhbGhvc3Q6ODAwMC9wcm9kdWN0cy9zdG9jayI7fXM6NjoiX2ZsYXNoIjthOjI6e3M6Mzoib2xkIjthOjA6e31zOjM6Im5ldyI7YTowOnt9fX0=', 1750358857)
+GO
+INSERT [dbo].[sessions] ([id], [user_id], [ip_address], [user_agent], [payload], [last_activity]) VALUES (N'L1gjqGaLWTKMpomVvVrODTWA6McoZfRbTVwz3Uth', NULL, N'127.0.0.1', N'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/137.0.0.0 Safari/537.36', N'YTozOntzOjY6Il90b2tlbiI7czo0MDoiTkw4TTBKOE52Y2tSNHJFVDM2aHpyMHp6ZGd0Qlp4eTFUSkZTbENiViI7czo5OiJfcHJldmlvdXMiO2E6MTp7czozOiJ1cmwiO3M6MzA6Imh0dHA6Ly9sb2NhbGhvc3Q6ODAwMC9wcm9kdWN0cyI7fXM6NjoiX2ZsYXNoIjthOjI6e3M6Mzoib2xkIjthOjA6e31zOjM6Im5ldyI7YTowOnt9fX0=', 1750358705)
+GO
+INSERT [dbo].[sessions] ([id], [user_id], [ip_address], [user_agent], [payload], [last_activity]) VALUES (N'Lde9NvcTMlL4MKd2fWclxhn5CWHZ2J01tcK7zf2b', NULL, N'127.0.0.1', N'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/137.0.0.0 Safari/537.36', N'YToyOntzOjY6Il90b2tlbiI7czo0MDoianFGYmxVU0lnbHE2SEFKd3djd1RxelVYU2dUZ1JkanJYZHlUUkZhayI7czo2OiJfZmxhc2giO2E6Mjp7czozOiJvbGQiO2E6MDp7fXM6MzoibmV3IjthOjA6e319fQ==', 1750369694)
+GO
+INSERT [dbo].[sessions] ([id], [user_id], [ip_address], [user_agent], [payload], [last_activity]) VALUES (N'Le4siTVHlN24RBaDhAko0Buo4GaGo0uMeJvzO7ui', NULL, N'127.0.0.1', N'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/137.0.0.0 Safari/537.36', N'YTozOntzOjY6Il90b2tlbiI7czo0MDoiTzh0TlJ5WDhGaUk2SGpqUE9zcFlZd1ZLU3c0NXdVVjcwWEtvakdGZiI7czo5OiJfcHJldmlvdXMiO2E6MTp7czozOiJ1cmwiO3M6MzA6Imh0dHA6Ly9sb2NhbGhvc3Q6ODAwMC9wcm9kdWN0cyI7fXM6NjoiX2ZsYXNoIjthOjI6e3M6Mzoib2xkIjthOjA6e31zOjM6Im5ldyI7YTowOnt9fX0=', 1750366788)
+GO
+INSERT [dbo].[sessions] ([id], [user_id], [ip_address], [user_agent], [payload], [last_activity]) VALUES (N'Lin1vINgGyk6DZBSUCbT6Dh1210jqzvGgQbkESeW', NULL, N'127.0.0.1', N'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/137.0.0.0 Safari/537.36', N'YTozOntzOjY6Il90b2tlbiI7czo0MDoiTW1NWFpyVm1oYngzZzJpRTRRamdSSVlvWGxwbHpQdldGRlE2SXRDQyI7czo5OiJfcHJldmlvdXMiO2E6MTp7czozOiJ1cmwiO3M6MzA6Imh0dHA6Ly9sb2NhbGhvc3Q6ODAwMC9wcm9kdWN0cyI7fXM6NjoiX2ZsYXNoIjthOjI6e3M6Mzoib2xkIjthOjA6e31zOjM6Im5ldyI7YTowOnt9fX0=', 1750367326)
+GO
+INSERT [dbo].[sessions] ([id], [user_id], [ip_address], [user_agent], [payload], [last_activity]) VALUES (N'mEEEPur7pAB9uB0xzlJvOlOpmlvacMLo4KdMt479', NULL, N'127.0.0.1', N'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/137.0.0.0 Safari/537.36', N'YTozOntzOjY6Il90b2tlbiI7czo0MDoieUhiQzJPclVzM09VMnlwNW5ycXNERDZkUVhxNXp6ZzhmMTBjWTM3VCI7czo5OiJfcHJldmlvdXMiO2E6MTp7czozOiJ1cmwiO3M6MzA6Imh0dHA6Ly9sb2NhbGhvc3Q6ODAwMC9wcm9kdWN0cyI7fXM6NjoiX2ZsYXNoIjthOjI6e3M6Mzoib2xkIjthOjA6e31zOjM6Im5ldyI7YTowOnt9fX0=', 1750358618)
+GO
+INSERT [dbo].[sessions] ([id], [user_id], [ip_address], [user_agent], [payload], [last_activity]) VALUES (N'MfPvPYz0HAl1xZQf2RfSObRhMJdOtj4wBf35rjPr', NULL, N'127.0.0.1', N'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/137.0.0.0 Safari/537.36', N'YTozOntzOjY6Il90b2tlbiI7czo0MDoiMG8zMWw3YnRtck16b2hWMXo5ODhwWFQ4VU9RMDdBNWF0UU9BTUdVUiI7czo5OiJfcHJldmlvdXMiO2E6MTp7czozOiJ1cmwiO3M6MzA6Imh0dHA6Ly9sb2NhbGhvc3Q6ODAwMC9wcm9kdWN0cyI7fXM6NjoiX2ZsYXNoIjthOjI6e3M6Mzoib2xkIjthOjA6e31zOjM6Im5ldyI7YTowOnt9fX0=', 1750363452)
+GO
+INSERT [dbo].[sessions] ([id], [user_id], [ip_address], [user_agent], [payload], [last_activity]) VALUES (N'mrJS4URdFZYtWWh99lwkrhfR9XjVy1R7zieEtqSH', NULL, N'127.0.0.1', N'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/137.0.0.0 Safari/537.36', N'YTozOntzOjY6Il90b2tlbiI7czo0MDoidG5pS2RSS1habjFqRmlQYWRjSTNVQ1RPWHM1SWJrbHJVTXhiNG5zSSI7czo5OiJfcHJldmlvdXMiO2E6MTp7czozOiJ1cmwiO3M6MzA6Imh0dHA6Ly9sb2NhbGhvc3Q6ODAwMC9wcm9kdWN0cyI7fXM6NjoiX2ZsYXNoIjthOjI6e3M6Mzoib2xkIjthOjA6e31zOjM6Im5ldyI7YTowOnt9fX0=', 1750366150)
+GO
+INSERT [dbo].[sessions] ([id], [user_id], [ip_address], [user_agent], [payload], [last_activity]) VALUES (N'MznQCPnC3nAZ6mNEP0jSXNk273wY23aOO7EPGdC2', NULL, N'127.0.0.1', N'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/137.0.0.0 Safari/537.36', N'YTozOntzOjY6Il90b2tlbiI7czo0MDoiNDJJanlYY3VqTWI5cTlBa1RnZ1ByUEp4cDFlVTJrdEFsN0JyNTFLNiI7czo5OiJfcHJldmlvdXMiO2E6MTp7czozOiJ1cmwiO3M6MzA6Imh0dHA6Ly9sb2NhbGhvc3Q6ODAwMC9wcm9kdWN0cyI7fXM6NjoiX2ZsYXNoIjthOjI6e3M6Mzoib2xkIjthOjA6e31zOjM6Im5ldyI7YTowOnt9fX0=', 1750368414)
+GO
+INSERT [dbo].[sessions] ([id], [user_id], [ip_address], [user_agent], [payload], [last_activity]) VALUES (N'NJejSZyaNX2oaRhPeuHvg22i4i8qvV1EqUM3gaGm', NULL, N'127.0.0.1', N'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/137.0.0.0 Safari/537.36', N'YTozOntzOjY6Il90b2tlbiI7czo0MDoiU1RtdUJIME1LRW5rWm91MjFwZ01rbUx6OEV1M1N4endyZjZkRGZ5ZiI7czo5OiJfcHJldmlvdXMiO2E6MTp7czozOiJ1cmwiO3M6MzA6Imh0dHA6Ly9sb2NhbGhvc3Q6ODAwMC9wcm9kdWN0cyI7fXM6NjoiX2ZsYXNoIjthOjI6e3M6Mzoib2xkIjthOjA6e31zOjM6Im5ldyI7YTowOnt9fX0=', 1750367192)
+GO
+INSERT [dbo].[sessions] ([id], [user_id], [ip_address], [user_agent], [payload], [last_activity]) VALUES (N'Nm0MtFmJ59nv9tfZwzqlK7mD8LCG7Muxzs8z8zdL', NULL, N'127.0.0.1', N'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/137.0.0.0 Safari/537.36', N'YTozOntzOjY6Il90b2tlbiI7czo0MDoieHRnY0o4VTJnMlNzZHpSa0x4NzEyM2w0em5GREZwaVVvU0lQaU03MCI7czo5OiJfcHJldmlvdXMiO2E6MTp7czozOiJ1cmwiO3M6MzA6Imh0dHA6Ly9sb2NhbGhvc3Q6ODAwMC9wcm9kdWN0cyI7fXM6NjoiX2ZsYXNoIjthOjI6e3M6Mzoib2xkIjthOjA6e31zOjM6Im5ldyI7YTowOnt9fX0=', 1750367478)
+GO
+INSERT [dbo].[sessions] ([id], [user_id], [ip_address], [user_agent], [payload], [last_activity]) VALUES (N'nO80OkDeqtwSIzn0WElCL1FxltYKMlaLafdEJIbv', NULL, N'127.0.0.1', N'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/137.0.0.0 Safari/537.36', N'YToyOntzOjY6Il90b2tlbiI7czo0MDoiS3hXbjR1dlp2Z2VsRXdNUHR5TmlCN0RDQ3p2WDdmeU9od3FIZUE5ZyI7czo2OiJfZmxhc2giO2E6Mjp7czozOiJvbGQiO2E6MDp7fXM6MzoibmV3IjthOjA6e319fQ==', 1750365294)
+GO
+INSERT [dbo].[sessions] ([id], [user_id], [ip_address], [user_agent], [payload], [last_activity]) VALUES (N'NpQ0ccJgZiPgM2Fz85jPpsUnU5AQbZBYIKlxrbk4', NULL, N'127.0.0.1', N'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/137.0.0.0 Safari/537.36', N'YTozOntzOjY6Il90b2tlbiI7czo0MDoiSktGb2d3UTRFN2E5VDAwRlNFRFpKeXVzeTJPMXk1b01acTh4Q0E0RSI7czo5OiJfcHJldmlvdXMiO2E6MTp7czozOiJ1cmwiO3M6MzA6Imh0dHA6Ly9sb2NhbGhvc3Q6ODAwMC9wcm9kdWN0cyI7fXM6NjoiX2ZsYXNoIjthOjI6e3M6Mzoib2xkIjthOjA6e31zOjM6Im5ldyI7YTowOnt9fX0=', 1750358617)
+GO
+INSERT [dbo].[sessions] ([id], [user_id], [ip_address], [user_agent], [payload], [last_activity]) VALUES (N'NQlIZZozsGUZGyEHBrRWEEzhxLIazeWzM1NxVqfK', NULL, N'131.255.37.4', N'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/137.0.0.0 Safari/537.36', N'YTozOntzOjY6Il90b2tlbiI7czo0MDoiWGxmM0RpeTBjRlRnekhNSmQzNkZudmFkeHkwRTJvZjUzdGdzWktYZyI7czo5OiJfcHJldmlvdXMiO2E6MTp7czozOiJ1cmwiO3M6NjA6Imh0dHA6Ly9nYXVudGxldC5icmF6aWxzb3V0aC5jbG91ZGFwcC5henVyZS5jb206ODAwMC9wcm9kdWN0cyI7fXM6NjoiX2ZsYXNoIjthOjI6e3M6Mzoib2xkIjthOjA6e31zOjM6Im5ldyI7YTowOnt9fX0=', 1750381127)
+GO
+INSERT [dbo].[sessions] ([id], [user_id], [ip_address], [user_agent], [payload], [last_activity]) VALUES (N'o7sNYJ3tfEjhOMxOajpWj1KCiQYXAecDAbvJiHTH', NULL, N'127.0.0.1', N'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/137.0.0.0 Safari/537.36', N'YTozOntzOjY6Il90b2tlbiI7czo0MDoiemFrdGVmOER6UHdDanZCTkxYRDJxdnJZVmdYbnhCdG5ta1NKWEF6UiI7czo5OiJfcHJldmlvdXMiO2E6MTp7czozOiJ1cmwiO3M6MzA6Imh0dHA6Ly9sb2NhbGhvc3Q6ODAwMC9wcm9kdWN0cyI7fXM6NjoiX2ZsYXNoIjthOjI6e3M6Mzoib2xkIjthOjA6e31zOjM6Im5ldyI7YTowOnt9fX0=', 1750358800)
+GO
+INSERT [dbo].[sessions] ([id], [user_id], [ip_address], [user_agent], [payload], [last_activity]) VALUES (N'oDANZlK6TN0qTU7al5DTSEq9mS0iuArq9pyuXwir', NULL, N'127.0.0.1', N'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/137.0.0.0 Safari/537.36', N'YToyOntzOjY6Il90b2tlbiI7czo0MDoiTTg0ZnhxYXpQdE5ET3NEQTdhbjRBSFJxT1d4VTVHUXlURUx5RmNzYyI7czo2OiJfZmxhc2giO2E6Mjp7czozOiJvbGQiO2E6MDp7fXM6MzoibmV3IjthOjA6e319fQ==', 1750358516)
+GO
+INSERT [dbo].[sessions] ([id], [user_id], [ip_address], [user_agent], [payload], [last_activity]) VALUES (N'OE52sOzSlEGWfjZ8jiT8sQjNmoA3zlA2C6JlPgxo', NULL, N'187.43.130.230', N'Mozilla/5.0 (Linux; Android 10; K) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/137.0.0.0 Mobile Safari/537.36', N'YTozOntzOjY6Il90b2tlbiI7czo0MDoiR3FINFZnSXFDNWd1OGdJZEdJamt5bDlHWUZCb2o1Z3hURlByZkhLTiI7czo5OiJfcHJldmlvdXMiO2E6MTp7czozOiJ1cmwiO3M6NjA6Imh0dHA6Ly9nYXVudGxldC5icmF6aWxzb3V0aC5jbG91ZGFwcC5henVyZS5jb206ODAwMC9wcm9kdWN0cyI7fXM6NjoiX2ZsYXNoIjthOjI6e3M6Mzoib2xkIjthOjA6e31zOjM6Im5ldyI7YTowOnt9fX0=', 1750375694)
+GO
+INSERT [dbo].[sessions] ([id], [user_id], [ip_address], [user_agent], [payload], [last_activity]) VALUES (N'oPbINxfLXOeqhbpMO8dRbFQjW8uanqRMAMI73tn6', NULL, N'127.0.0.1', N'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/137.0.0.0 Safari/537.36', N'YTozOntzOjY6Il90b2tlbiI7czo0MDoiZVAyY2lGVEdxZzdwbUthanpJWG5mOU51a2c0bHZmUzhYbnhDS0l2MSI7czo5OiJfcHJldmlvdXMiO2E6MTp7czozOiJ1cmwiO3M6MzA6Imh0dHA6Ly9sb2NhbGhvc3Q6ODAwMC9wcm9kdWN0cyI7fXM6NjoiX2ZsYXNoIjthOjI6e3M6Mzoib2xkIjthOjA6e31zOjM6Im5ldyI7YTowOnt9fX0=', 1750365279)
+GO
+INSERT [dbo].[sessions] ([id], [user_id], [ip_address], [user_agent], [payload], [last_activity]) VALUES (N'Ovl6ui8OpdtcIe9unUA72QaXQ67LCXblal4qmpxT', NULL, N'177.40.7.226', N'Mozilla/5.0 (iPhone; CPU iPhone OS 18_5_0 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) CriOS/137.0.7151.107 Mobile/15E148 Safari/604.1', N'YTozOntzOjY6Il90b2tlbiI7czo0MDoiZEFGVnZSSXdYdHNxajB3dGFWWWt6ZjJ2dVNUVm1HOVBHSmJBN2lTNSI7czo5OiJfcHJldmlvdXMiO2E6MTp7czozOiJ1cmwiO3M6NjA6Imh0dHA6Ly9nYXVudGxldC5icmF6aWxzb3V0aC5jbG91ZGFwcC5henVyZS5jb206ODAwMC9wcm9kdWN0cyI7fXM6NjoiX2ZsYXNoIjthOjI6e3M6Mzoib2xkIjthOjA6e31zOjM6Im5ldyI7YTowOnt9fX0=', 1750375978)
+GO
+INSERT [dbo].[sessions] ([id], [user_id], [ip_address], [user_agent], [payload], [last_activity]) VALUES (N'p7ZIJ8EKd38VfYHHRIGbCIe1ctarnMO4qfUOGb6D', NULL, N'127.0.0.1', N'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/137.0.0.0 Safari/537.36', N'YTozOntzOjY6Il90b2tlbiI7czo0MDoidUphck9kZU93MUVWbkVUUHNrOWJvdnllaVg0d0dSOTB3cTAxS3htUSI7czo5OiJfcHJldmlvdXMiO2E6MTp7czozOiJ1cmwiO3M6MzY6Imh0dHA6Ly9sb2NhbGhvc3Q6ODAwMC9wcm9kdWN0cy9zdG9jayI7fXM6NjoiX2ZsYXNoIjthOjI6e3M6Mzoib2xkIjthOjA6e31zOjM6Im5ldyI7YTowOnt9fX0=', 1750358704)
+GO
+INSERT [dbo].[sessions] ([id], [user_id], [ip_address], [user_agent], [payload], [last_activity]) VALUES (N'PHbpfrOuaRdv4LopmlI7ASrgUvtNKGBgdgDutRoQ', NULL, N'177.40.7.226', N'Mozilla/5.0 (iPhone; CPU iPhone OS 18_5_0 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) CriOS/137.0.7151.107 Mobile/15E148 Safari/604.1', N'YToyOntzOjY6Il90b2tlbiI7czo0MDoiYlpkMWIyb0F4T0tmZjJrdkpNR0JncWk4NGpQaVg5R3hPQ2thU2p2YiI7czo2OiJfZmxhc2giO2E6Mjp7czozOiJvbGQiO2E6MDp7fXM6MzoibmV3IjthOjA6e319fQ==', 1750375977)
+GO
+INSERT [dbo].[sessions] ([id], [user_id], [ip_address], [user_agent], [payload], [last_activity]) VALUES (N'PpEYoMKe6xc2IfaWGS89WeJ0CSP459obTBJ1Els1', NULL, N'131.255.37.4', N'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/137.0.0.0 Safari/537.36', N'YTozOntzOjY6Il90b2tlbiI7czo0MDoiSEZFbGRDU2VIa3lsY0FORXBXYUxOdzlhSWVhWERXdmdkd3l2RUo3aSI7czo5OiJfcHJldmlvdXMiO2E6MTp7czozOiJ1cmwiO3M6NjA6Imh0dHA6Ly9nYXVudGxldC5icmF6aWxzb3V0aC5jbG91ZGFwcC5henVyZS5jb206ODAwMC9wcm9kdWN0cyI7fXM6NjoiX2ZsYXNoIjthOjI6e3M6Mzoib2xkIjthOjA6e31zOjM6Im5ldyI7YTowOnt9fX0=', 1750381145)
+GO
+INSERT [dbo].[sessions] ([id], [user_id], [ip_address], [user_agent], [payload], [last_activity]) VALUES (N'qgReT6vadmzX4T3n6J9ydDk8LWmf6AA3UIcCxshH', NULL, N'127.0.0.1', N'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/137.0.0.0 Safari/537.36', N'YToyOntzOjY6Il90b2tlbiI7czo0MDoieENnUFVnWkFiQkZ3V2FQaHB2WExaQUtKN3ozT1RlSThMTGlsU1VTeiI7czo2OiJfZmxhc2giO2E6Mjp7czozOiJvbGQiO2E6MDp7fXM6MzoibmV3IjthOjA6e319fQ==', 1750367507)
+GO
+INSERT [dbo].[sessions] ([id], [user_id], [ip_address], [user_agent], [payload], [last_activity]) VALUES (N'qVWiGvjYj6zULzuQOFfbyuJ4KNXj3uajzVH8nyFZ', NULL, N'127.0.0.1', N'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/137.0.0.0 Safari/537.36', N'YToyOntzOjY6Il90b2tlbiI7czo0MDoiNnQ3ajkxRG5qQjYyV1lrYmVCQUFsUWpFWUhBeDlRYkhicFNMWGRHOSI7czo2OiJfZmxhc2giO2E6Mjp7czozOiJvbGQiO2E6MDp7fXM6MzoibmV3IjthOjA6e319fQ==', 1750368450)
+GO
+INSERT [dbo].[sessions] ([id], [user_id], [ip_address], [user_agent], [payload], [last_activity]) VALUES (N'RkilC8bZrDxDXwSyx0tPuUsBdfxbxsiETg1Ut3oS', NULL, N'127.0.0.1', N'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/137.0.0.0 Safari/537.36', N'YToyOntzOjY6Il90b2tlbiI7czo0MDoiQUhJUE9GbEZaN3oxbnZGYzlIZHN6RXFoY01VS1pkUUtoYzIyVXl6TiI7czo2OiJfZmxhc2giO2E6Mjp7czozOiJvbGQiO2E6MDp7fXM6MzoibmV3IjthOjA6e319fQ==', 1750359640)
+GO
+INSERT [dbo].[sessions] ([id], [user_id], [ip_address], [user_agent], [payload], [last_activity]) VALUES (N'Rpp3CcrRJeBigahjufrQi0XFXOTtjwLfXC7vB73Y', NULL, N'127.0.0.1', N'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/137.0.0.0 Safari/537.36', N'YToyOntzOjY6Il90b2tlbiI7czo0MDoiUkt0bEtVZ3lWY1I1REtGNzNlYlVIM0E2OGhoQk9ZR2F1N1ZGSFNPTCI7czo2OiJfZmxhc2giO2E6Mjp7czozOiJvbGQiO2E6MDp7fXM6MzoibmV3IjthOjA6e319fQ==', 1750365295)
+GO
+INSERT [dbo].[sessions] ([id], [user_id], [ip_address], [user_agent], [payload], [last_activity]) VALUES (N'S4zcSDk3ILyxRAE7Z9Ixv5isgpNvIE2wzS3ZZZhE', NULL, N'127.0.0.1', N'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/137.0.0.0 Safari/537.36', N'YToyOntzOjY6Il90b2tlbiI7czo0MDoiamYzOHE1OW1BZXRVSWJ4WFh3ZmlwSmR4MWV6TVZZVTRRTEllNDdnRyI7czo2OiJfZmxhc2giO2E6Mjp7czozOiJvbGQiO2E6MDp7fXM6MzoibmV3IjthOjA6e319fQ==', 1750363542)
+GO
+INSERT [dbo].[sessions] ([id], [user_id], [ip_address], [user_agent], [payload], [last_activity]) VALUES (N'SCUQVLSEPkzJsTSOCEHFnOHmei3Jw0Er0RcyHNga', NULL, N'127.0.0.1', N'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/137.0.0.0 Safari/537.36', N'YToyOntzOjY6Il90b2tlbiI7czo0MDoiTHlQTjc4NmZDcUppUUVab0tXb3gxOUlGRjRpdmczazRFUUhEQXBmTSI7czo2OiJfZmxhc2giO2E6Mjp7czozOiJvbGQiO2E6MDp7fXM6MzoibmV3IjthOjA6e319fQ==', 1750358632)
+GO
+INSERT [dbo].[sessions] ([id], [user_id], [ip_address], [user_agent], [payload], [last_activity]) VALUES (N'SKhvDxe8bdenkSe12PcJLL6qIVGTyPzlQWij3xhi', NULL, N'131.255.37.4', N'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/137.0.0.0 Safari/537.36', N'YTozOntzOjY6Il90b2tlbiI7czo0MDoiY2FZN2hjTlZyWmtoUDhTejJ5QzJQb0t1dDk0bHhnczhCdFJSZ3B0MCI7czo5OiJfcHJldmlvdXMiO2E6MTp7czozOiJ1cmwiO3M6NjA6Imh0dHA6Ly9nYXVudGxldC5icmF6aWxzb3V0aC5jbG91ZGFwcC5henVyZS5jb206ODAwMC9wcm9kdWN0cyI7fXM6NjoiX2ZsYXNoIjthOjI6e3M6Mzoib2xkIjthOjA6e31zOjM6Im5ldyI7YTowOnt9fX0=', 1750424674)
+GO
+INSERT [dbo].[sessions] ([id], [user_id], [ip_address], [user_agent], [payload], [last_activity]) VALUES (N'SMkR4bdyb0B1kD3ivOEUJGT0GATeVlowq2JUAD08', NULL, N'127.0.0.1', N'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/137.0.0.0 Safari/537.36', N'YToyOntzOjY6Il90b2tlbiI7czo0MDoiNGh3U0dIdzdnc3JTZjNhTEMwamh2Q0dCVEd4SUVuWU00d2Z6YXFmayI7czo2OiJfZmxhc2giO2E6Mjp7czozOiJvbGQiO2E6MDp7fXM6MzoibmV3IjthOjA6e319fQ==', 1750367212)
+GO
+INSERT [dbo].[sessions] ([id], [user_id], [ip_address], [user_agent], [payload], [last_activity]) VALUES (N'SnG17f0mLT7o2XAQL8ds0zwV04pkNxYOmBZKYqf0', NULL, N'172.249.48.66', N'Mozilla/5.0 (iPhone; CPU iPhone OS 18_5 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/18.5 Mobile/15E148 Safari/604.1', N'YToyOntzOjY6Il90b2tlbiI7czo0MDoiYWZaMlRFSUQzbVpablZTU0Fja2lSYjc4b2lqNlhnR1E4UWRoeUlJZSI7czo2OiJfZmxhc2giO2E6Mjp7czozOiJvbGQiO2E6MDp7fXM6MzoibmV3IjthOjA6e319fQ==', 1750375918)
+GO
+INSERT [dbo].[sessions] ([id], [user_id], [ip_address], [user_agent], [payload], [last_activity]) VALUES (N'SPuzYDo1mAHozVuOHqKOU09gI62dX7JvfEMV9PSk', NULL, N'187.43.130.230', N'Mozilla/5.0 (Linux; Android 10; K) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/137.0.0.0 Mobile Safari/537.36', N'YTozOntzOjY6Il90b2tlbiI7czo0MDoiQUR1ZlpVYkxXVG1iaUp6cm5JVUltV0xuWXVEdkh4Y2N0R2xmWnNzZiI7czo5OiJfcHJldmlvdXMiO2E6MTp7czozOiJ1cmwiO3M6NjA6Imh0dHA6Ly9nYXVudGxldC5icmF6aWxzb3V0aC5jbG91ZGFwcC5henVyZS5jb206ODAwMC9wcm9kdWN0cyI7fXM6NjoiX2ZsYXNoIjthOjI6e3M6Mzoib2xkIjthOjA6e31zOjM6Im5ldyI7YTowOnt9fX0=', 1750375968)
+GO
+INSERT [dbo].[sessions] ([id], [user_id], [ip_address], [user_agent], [payload], [last_activity]) VALUES (N'sZO1PnD0lbUiBhfaHzG4s21CKN8YgwgJoVfMQWhk', NULL, N'127.0.0.1', N'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/137.0.0.0 Safari/537.36', N'YTozOntzOjY6Il90b2tlbiI7czo0MDoiMm5sTHgxTXZNNzVjVDdXb0t6UlNmb3hFcWthWEFWUUJVTXR4U1ZqMyI7czo5OiJfcHJldmlvdXMiO2E6MTp7czozOiJ1cmwiO3M6MzA6Imh0dHA6Ly9sb2NhbGhvc3Q6ODAwMC9wcm9kdWN0cyI7fXM6NjoiX2ZsYXNoIjthOjI6e3M6Mzoib2xkIjthOjA6e31zOjM6Im5ldyI7YTowOnt9fX0=', 1750369627)
+GO
+INSERT [dbo].[sessions] ([id], [user_id], [ip_address], [user_agent], [payload], [last_activity]) VALUES (N'tCmEqCIYs4v6h3tj3yIVoTUc2OmQXoRqRkd5616q', NULL, N'127.0.0.1', N'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/137.0.0.0 Safari/537.36', N'YTozOntzOjY6Il90b2tlbiI7czo0MDoiMGI2cTk0bFphQ0J6bGNEZllnd0xwc3RlZHhWaVhlUmtZWTlGTlZPNSI7czo5OiJfcHJldmlvdXMiO2E6MTp7czozOiJ1cmwiO3M6MzA6Imh0dHA6Ly9sb2NhbGhvc3Q6ODAwMC9wcm9kdWN0cyI7fXM6NjoiX2ZsYXNoIjthOjI6e3M6Mzoib2xkIjthOjA6e31zOjM6Im5ldyI7YTowOnt9fX0=', 1750358503)
+GO
+INSERT [dbo].[sessions] ([id], [user_id], [ip_address], [user_agent], [payload], [last_activity]) VALUES (N'ToxMdoyRooOojwaKlYQ1teIcks0ySsxOd1kzcFYH', NULL, N'127.0.0.1', N'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/137.0.0.0 Safari/537.36', N'YTozOntzOjY6Il90b2tlbiI7czo0MDoibXdPdU5EeVJjTGllamlBZHk3OHdXWHJmOVdkZnRzU0xsUHNsalBTeCI7czo5OiJfcHJldmlvdXMiO2E6MTp7czozOiJ1cmwiO3M6MzA6Imh0dHA6Ly9sb2NhbGhvc3Q6ODAwMC9wcm9kdWN0cyI7fXM6NjoiX2ZsYXNoIjthOjI6e3M6Mzoib2xkIjthOjA6e31zOjM6Im5ldyI7YTowOnt9fX0=', 1750365296)
+GO
+INSERT [dbo].[sessions] ([id], [user_id], [ip_address], [user_agent], [payload], [last_activity]) VALUES (N'ttJN16CMrsLhtS0oTR45TsCuETOCx2Q9HRh541nK', NULL, N'127.0.0.1', N'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/137.0.0.0 Safari/537.36', N'YTozOntzOjY6Il90b2tlbiI7czo0MDoiSXRaUlVpREZBV2VIaVVCcDdFQWlIaWlURGtRbGh2Qk5SZWJWYXpoayI7czo5OiJfcHJldmlvdXMiO2E6MTp7czozOiJ1cmwiO3M6MzY6Imh0dHA6Ly9sb2NhbGhvc3Q6ODAwMC9wcm9kdWN0cy9zdG9jayI7fXM6NjoiX2ZsYXNoIjthOjI6e3M6Mzoib2xkIjthOjA6e31zOjM6Im5ldyI7YTowOnt9fX0=', 1750358829)
+GO
+INSERT [dbo].[sessions] ([id], [user_id], [ip_address], [user_agent], [payload], [last_activity]) VALUES (N'twouBt4dncX2upMYPJ4zl3Vhhq2NZZfeFTEquh18', NULL, N'131.255.37.4', N'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/137.0.0.0 Safari/537.36', N'YTozOntzOjY6Il90b2tlbiI7czo0MDoiMDk4R3c4aHVDSzlFQ2hZdmQ1NTJjeTNkaEZ6UjhVSVhBd1J3WlZmTCI7czo5OiJfcHJldmlvdXMiO2E6MTp7czozOiJ1cmwiO3M6NjA6Imh0dHA6Ly9nYXVudGxldC5icmF6aWxzb3V0aC5jbG91ZGFwcC5henVyZS5jb206ODAwMC9wcm9kdWN0cyI7fXM6NjoiX2ZsYXNoIjthOjI6e3M6Mzoib2xkIjthOjA6e31zOjM6Im5ldyI7YTowOnt9fX0=', 1750381453)
+GO
+INSERT [dbo].[sessions] ([id], [user_id], [ip_address], [user_agent], [payload], [last_activity]) VALUES (N'U8UN1s7EW9hBntK6Cg1aXLgjqkVxOehaPJpSwex1', NULL, N'127.0.0.1', N'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/137.0.0.0 Safari/537.36', N'YTozOntzOjY6Il90b2tlbiI7czo0MDoibWo5T3NOa05JTW9BRWxLTHV6RmVtb2c3elhkcncyNjlMZmpPYTgzdSI7czo5OiJfcHJldmlvdXMiO2E6MTp7czozOiJ1cmwiO3M6MzA6Imh0dHA6Ly9sb2NhbGhvc3Q6ODAwMC9wcm9kdWN0cyI7fXM6NjoiX2ZsYXNoIjthOjI6e3M6Mzoib2xkIjthOjA6e31zOjM6Im5ldyI7YTowOnt9fX0=', 1750358826)
+GO
+INSERT [dbo].[sessions] ([id], [user_id], [ip_address], [user_agent], [payload], [last_activity]) VALUES (N'UCFF22WgPWbVrSLhdBZ8KSJiasidDtO69ZV2MNOp', NULL, N'127.0.0.1', N'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/137.0.0.0 Safari/537.36', N'YTozOntzOjY6Il90b2tlbiI7czo0MDoieG5wNG9BWDlOeFVqWnNydjNNYk9vQk9NVm9BbjM4NU9vRk80WVRJRiI7czo5OiJfcHJldmlvdXMiO2E6MTp7czozOiJ1cmwiO3M6MzA6Imh0dHA6Ly9sb2NhbGhvc3Q6ODAwMC9wcm9kdWN0cyI7fXM6NjoiX2ZsYXNoIjthOjI6e3M6Mzoib2xkIjthOjA6e31zOjM6Im5ldyI7YTowOnt9fX0=', 1750367476)
+GO
+INSERT [dbo].[sessions] ([id], [user_id], [ip_address], [user_agent], [payload], [last_activity]) VALUES (N'UE2V2rLJKPLZYe3ozVtEjccmQhj9niI4907kLftn', NULL, N'127.0.0.1', N'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/137.0.0.0 Safari/537.36', N'YTozOntzOjY6Il90b2tlbiI7czo0MDoidDVxZEhseG42NjlCMGhFWGJiV0JjNHpWV2x5enhTOGQ1NEtKc3RROCI7czo5OiJfcHJldmlvdXMiO2E6MTp7czozOiJ1cmwiO3M6MzA6Imh0dHA6Ly9sb2NhbGhvc3Q6ODAwMC9wcm9kdWN0cyI7fXM6NjoiX2ZsYXNoIjthOjI6e3M6Mzoib2xkIjthOjA6e31zOjM6Im5ldyI7YTowOnt9fX0=', 1750366789)
+GO
+INSERT [dbo].[sessions] ([id], [user_id], [ip_address], [user_agent], [payload], [last_activity]) VALUES (N'uit2jFf9dlV1hm3TPj0SVQvZvA4d5LDkHtHXhNBB', NULL, N'127.0.0.1', N'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/137.0.0.0 Safari/537.36', N'YToyOntzOjY6Il90b2tlbiI7czo0MDoiQmNmcXpPTTRadzBlb2ZIWEYwMVJ0RE5aQW40UklkRUh5eERZMmZUMiI7czo2OiJfZmxhc2giO2E6Mjp7czozOiJvbGQiO2E6MDp7fXM6MzoibmV3IjthOjA6e319fQ==', 1750358810)
+GO
+INSERT [dbo].[sessions] ([id], [user_id], [ip_address], [user_agent], [payload], [last_activity]) VALUES (N'uSesOaZiIh86tAnV5m5RQtgQ0wUdaIHoZX2Oz4Ts', NULL, N'187.43.130.230', N'Mozilla/5.0 (Linux; Android 10; K) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/137.0.0.0 Mobile Safari/537.36', N'YTozOntzOjY6Il90b2tlbiI7czo0MDoiM3VxQ2pXZW9RMUV4WDBFc1Y5Ymp0U0ppaXRMUndQaFl0UGtqdTVjRiI7czo5OiJfcHJldmlvdXMiO2E6MTp7czozOiJ1cmwiO3M6NjA6Imh0dHA6Ly9nYXVudGxldC5icmF6aWxzb3V0aC5jbG91ZGFwcC5henVyZS5jb206ODAwMC9wcm9kdWN0cyI7fXM6NjoiX2ZsYXNoIjthOjI6e3M6Mzoib2xkIjthOjA6e31zOjM6Im5ldyI7YTowOnt9fX0=', 1750375662)
+GO
+INSERT [dbo].[sessions] ([id], [user_id], [ip_address], [user_agent], [payload], [last_activity]) VALUES (N'Ut8N2T46hXjzGNpq32t7q7521quxEmSENpgZNRW7', NULL, N'127.0.0.1', N'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/137.0.0.0 Safari/537.36', N'YToyOntzOjY6Il90b2tlbiI7czo0MDoiem9HSXhlbEVmczI2SFpEdGxTcWRvVzNwQ25HQ01TWjlaV0RtYWdTeCI7czo2OiJfZmxhc2giO2E6Mjp7czozOiJvbGQiO2E6MDp7fXM6MzoibmV3IjthOjA6e319fQ==', 1750358851)
+GO
+INSERT [dbo].[sessions] ([id], [user_id], [ip_address], [user_agent], [payload], [last_activity]) VALUES (N'V4EZSngYaost8iOz3GqMSa9qLE4Akk6t8O3Ng7o9', NULL, N'127.0.0.1', N'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/137.0.0.0 Safari/537.36', N'YToyOntzOjY6Il90b2tlbiI7czo0MDoiN3ZkTTZSV2tYZFc3cTdqQlFsVmxhWUZtQ0o5WlRmNEJmZDlUT01OWCI7czo2OiJfZmxhc2giO2E6Mjp7czozOiJvbGQiO2E6MDp7fXM6MzoibmV3IjthOjA6e319fQ==', 1750364152)
+GO
+INSERT [dbo].[sessions] ([id], [user_id], [ip_address], [user_agent], [payload], [last_activity]) VALUES (N'vHeAoop1rnyosFG00yjNQZenMZiDzDFdyqqseq9E', NULL, N'127.0.0.1', N'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/137.0.0.0 Safari/537.36', N'YTozOntzOjY6Il90b2tlbiI7czo0MDoiUUhXdUEwRlBxT0VlTTBUZ0oxM0w0N3pROGJ3VGRTNk1Fbk1aOG5CVCI7czo5OiJfcHJldmlvdXMiO2E6MTp7czozOiJ1cmwiO3M6MzA6Imh0dHA6Ly9sb2NhbGhvc3Q6ODAwMC9wcm9kdWN0cyI7fXM6NjoiX2ZsYXNoIjthOjI6e3M6Mzoib2xkIjthOjA6e31zOjM6Im5ldyI7YTowOnt9fX0=', 1750358798)
+GO
+INSERT [dbo].[sessions] ([id], [user_id], [ip_address], [user_agent], [payload], [last_activity]) VALUES (N'vi4r3JBtJUYhQn21vp1IvnOToaPdma1hxHZwG9y5', NULL, N'127.0.0.1', N'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/137.0.0.0 Safari/537.36', N'YTozOntzOjY6Il90b2tlbiI7czo0MDoiMTdVTW9GYjdZSXhqdHIzTjFKaGlUYnkzZTRSRGpDajV2WjIzRThrcSI7czo5OiJfcHJldmlvdXMiO2E6MTp7czozOiJ1cmwiO3M6MzY6Imh0dHA6Ly9sb2NhbGhvc3Q6ODAwMC9wcm9kdWN0cy9zdG9jayI7fXM6NjoiX2ZsYXNoIjthOjI6e3M6Mzoib2xkIjthOjA6e31zOjM6Im5ldyI7YTowOnt9fX0=', 1750358703)
+GO
+INSERT [dbo].[sessions] ([id], [user_id], [ip_address], [user_agent], [payload], [last_activity]) VALUES (N'ViUxEQnGLHk6ColHTtI7Tly33E2HTunD41jPYYRk', NULL, N'187.43.130.230', N'Mozilla/5.0 (Linux; Android 10; K) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/137.0.0.0 Mobile Safari/537.36', N'YTozOntzOjY6Il90b2tlbiI7czo0MDoiNWp5a0tUbXdpcHY1T29RSjBoNVE0c2tzUG9qQ0dRZEtWYUNjRTQ1aiI7czo5OiJfcHJldmlvdXMiO2E6MTp7czozOiJ1cmwiO3M6NjA6Imh0dHA6Ly9nYXVudGxldC5icmF6aWxzb3V0aC5jbG91ZGFwcC5henVyZS5jb206ODAwMC9wcm9kdWN0cyI7fXM6NjoiX2ZsYXNoIjthOjI6e3M6Mzoib2xkIjthOjA6e31zOjM6Im5ldyI7YTowOnt9fX0=', 1750376012)
+GO
+INSERT [dbo].[sessions] ([id], [user_id], [ip_address], [user_agent], [payload], [last_activity]) VALUES (N'VRwSsZsHUjMzqijUiIFJDnZTS2T2dFM50398WLao', NULL, N'127.0.0.1', N'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/137.0.0.0 Safari/537.36', N'YTozOntzOjY6Il90b2tlbiI7czo0MDoiZ21XejI4eTNFR1dWSDAxZlhrRjFjdzFUd2hkZEV1NjV5Mks0TXRzNiI7czo5OiJfcHJldmlvdXMiO2E6MTp7czozOiJ1cmwiO3M6MzA6Imh0dHA6Ly9sb2NhbGhvc3Q6ODAwMC9wcm9kdWN0cyI7fXM6NjoiX2ZsYXNoIjthOjI6e3M6Mzoib2xkIjthOjA6e31zOjM6Im5ldyI7YTowOnt9fX0=', 1750366152)
+GO
+INSERT [dbo].[sessions] ([id], [user_id], [ip_address], [user_agent], [payload], [last_activity]) VALUES (N'w0MZ3JVhJQ12xl68fjgUznRMe1tkw9ajZoto08nt', NULL, N'127.0.0.1', N'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/137.0.0.0 Safari/537.36', N'YTozOntzOjY6Il90b2tlbiI7czo0MDoiU0ZCWW5FSVNKdE1hamNraHZUNEtOcTg2TUtGdGpPUHBua1lXNzVkdSI7czo5OiJfcHJldmlvdXMiO2E6MTp7czozOiJ1cmwiO3M6MzA6Imh0dHA6Ly9sb2NhbGhvc3Q6ODAwMC9wcm9kdWN0cyI7fXM6NjoiX2ZsYXNoIjthOjI6e3M6Mzoib2xkIjthOjA6e31zOjM6Im5ldyI7YTowOnt9fX0=', 1750364161)
+GO
+INSERT [dbo].[sessions] ([id], [user_id], [ip_address], [user_agent], [payload], [last_activity]) VALUES (N'w5wffjJWSdNOLBRupGygLttBvHgaoIztfFodoHv7', NULL, N'127.0.0.1', N'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/137.0.0.0 Safari/537.36', N'YToyOntzOjY6Il90b2tlbiI7czo0MDoiaFZVMjR6cTNtZmQ3OG5FMzg2NUVVQnViWE43WGRCc1pTb3hacUJ2eiI7czo2OiJfZmxhc2giO2E6Mjp7czozOiJvbGQiO2E6MDp7fXM6MzoibmV3IjthOjA6e319fQ==', 1750363526)
+GO
+INSERT [dbo].[sessions] ([id], [user_id], [ip_address], [user_agent], [payload], [last_activity]) VALUES (N'wS98VmYUVr2pXDsHusZF55kYRNv15ig1WNnm2xb1', NULL, N'127.0.0.1', N'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/137.0.0.0 Safari/537.36', N'YTozOntzOjY6Il90b2tlbiI7czo0MDoiS0hqaERFdTF2U0o5Um1sQzVaM3k4cWsxSnNnalgwSm9adVpTdWpZcyI7czo5OiJfcHJldmlvdXMiO2E6MTp7czozOiJ1cmwiO3M6MzA6Imh0dHA6Ly9sb2NhbGhvc3Q6ODAwMC9wcm9kdWN0cyI7fXM6NjoiX2ZsYXNoIjthOjI6e3M6Mzoib2xkIjthOjA6e31zOjM6Im5ldyI7YTowOnt9fX0=', 1750367767)
+GO
+INSERT [dbo].[sessions] ([id], [user_id], [ip_address], [user_agent], [payload], [last_activity]) VALUES (N'wucRovK9w6tA358xmkyos23sXfVEl7WcIHyRRZ10', NULL, N'177.40.7.226', N'Mozilla/5.0 (iPhone; CPU iPhone OS 18_5_0 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) CriOS/137.0.7151.107 Mobile/15E148 Safari/604.1', N'YTozOntzOjY6Il90b2tlbiI7czo0MDoiVVpVSVNyMDBtMldEejFYN1FOcGZCbmxhNGdna2hUSzl5REJKM3pVdyI7czo5OiJfcHJldmlvdXMiO2E6MTp7czozOiJ1cmwiO3M6NjA6Imh0dHA6Ly9nYXVudGxldC5icmF6aWxzb3V0aC5jbG91ZGFwcC5henVyZS5jb206ODAwMC9wcm9kdWN0cyI7fXM6NjoiX2ZsYXNoIjthOjI6e3M6Mzoib2xkIjthOjA6e31zOjM6Im5ldyI7YTowOnt9fX0=', 1750375794)
+GO
+INSERT [dbo].[sessions] ([id], [user_id], [ip_address], [user_agent], [payload], [last_activity]) VALUES (N'wx2kHFirB1pfkI6A3jttfnBwV9zHpw315uZkzOnz', NULL, N'127.0.0.1', N'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/137.0.0.0 Safari/537.36', N'YTozOntzOjY6Il90b2tlbiI7czo0MDoiQTNNTGxubjBFNkdDTUVrWE5IQVdRV3hqN1FsN1hCSnlKVkRsdmQ1aiI7czo5OiJfcHJldmlvdXMiO2E6MTp7czozOiJ1cmwiO3M6MzY6Imh0dHA6Ly9sb2NhbGhvc3Q6ODAwMC9wcm9kdWN0cy9zdG9jayI7fXM6NjoiX2ZsYXNoIjthOjI6e3M6Mzoib2xkIjthOjA6e31zOjM6Im5ldyI7YTowOnt9fX0=', 1750363455)
+GO
+INSERT [dbo].[sessions] ([id], [user_id], [ip_address], [user_agent], [payload], [last_activity]) VALUES (N'XDauC5ifyUBjfWDR3uFNOtKp9JRCymTGN1SSiT08', NULL, N'127.0.0.1', N'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/137.0.0.0 Safari/537.36', N'YTozOntzOjY6Il90b2tlbiI7czo0MDoidFFQR01MeEg3TlZ3RmVSQUJtV2FON1kzdkNGb2paZktybGlsRmtoVCI7czo5OiJfcHJldmlvdXMiO2E6MTp7czozOiJ1cmwiO3M6MzA6Imh0dHA6Ly9sb2NhbGhvc3Q6ODAwMC9wcm9kdWN0cyI7fXM6NjoiX2ZsYXNoIjthOjI6e3M6Mzoib2xkIjthOjA6e31zOjM6Im5ldyI7YTowOnt9fX0=', 1750368418)
+GO
+INSERT [dbo].[sessions] ([id], [user_id], [ip_address], [user_agent], [payload], [last_activity]) VALUES (N'xiVbPH0eqoRiiXJj6IWCYAZ2TPzzskgm2xeZJncc', NULL, N'127.0.0.1', N'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/137.0.0.0 Safari/537.36', N'YTozOntzOjY6Il90b2tlbiI7czo0MDoiN0h2ZXcyeExvMTU2NGtGNGJ0bUU2Q3VpN3J5bGpXWmJVV29ZSVNITCI7czo5OiJfcHJldmlvdXMiO2E6MTp7czozOiJ1cmwiO3M6MzY6Imh0dHA6Ly9sb2NhbGhvc3Q6ODAwMC9wcm9kdWN0cy9zdG9jayI7fXM6NjoiX2ZsYXNoIjthOjI6e3M6Mzoib2xkIjthOjA6e31zOjM6Im5ldyI7YTowOnt9fX0=', 1750359605)
+GO
+INSERT [dbo].[sessions] ([id], [user_id], [ip_address], [user_agent], [payload], [last_activity]) VALUES (N'xsDj0aODtOwtdNruUffK7pF3y60YDWHzMrHpuE6I', NULL, N'127.0.0.1', N'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/137.0.0.0 Safari/537.36', N'YTozOntzOjY6Il90b2tlbiI7czo0MDoiTnhJdzBjaUdzMkU5SEI3U3ZRQzlNS3ZEMVNtNTVCVmdSaWlUcldjUyI7czo5OiJfcHJldmlvdXMiO2E6MTp7czozOiJ1cmwiO3M6MzA6Imh0dHA6Ly9sb2NhbGhvc3Q6ODAwMC9wcm9kdWN0cyI7fXM6NjoiX2ZsYXNoIjthOjI6e3M6Mzoib2xkIjthOjA6e31zOjM6Im5ldyI7YTowOnt9fX0=', 1750368451)
+GO
+INSERT [dbo].[sessions] ([id], [user_id], [ip_address], [user_agent], [payload], [last_activity]) VALUES (N'XT0dSzDzSTR6SiuFIvRXDNlGpkoI00LYKPOkOcSZ', NULL, N'127.0.0.1', N'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/137.0.0.0 Safari/537.36', N'YTozOntzOjY6Il90b2tlbiI7czo0MDoid1hFZ0RSOWxsWml4WkRoVno5MzdLRk9iSUFlTXN0dFMyTjh3NVdrMCI7czo5OiJfcHJldmlvdXMiO2E6MTp7czozOiJ1cmwiO3M6MzA6Imh0dHA6Ly9sb2NhbGhvc3Q6ODAwMC9wcm9kdWN0cyI7fXM6NjoiX2ZsYXNoIjthOjI6e3M6Mzoib2xkIjthOjA6e31zOjM6Im5ldyI7YTowOnt9fX0=', 1750367479)
+GO
+INSERT [dbo].[sessions] ([id], [user_id], [ip_address], [user_agent], [payload], [last_activity]) VALUES (N'Xv2lpjBQjBD3oNFxLo6mizm82eTMMr8Fc4Unhwx2', NULL, N'127.0.0.1', N'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/137.0.0.0 Safari/537.36', N'YToyOntzOjY6Il90b2tlbiI7czo0MDoiV2xsOGYzN3ZGVTl3d2RrWHVSTmpJQkZNeWVyS05wUUVzY0tvT0xJZCI7czo2OiJfZmxhc2giO2E6Mjp7czozOiJvbGQiO2E6MDp7fXM6MzoibmV3IjthOjA6e319fQ==', 1750358850)
+GO
+INSERT [dbo].[sessions] ([id], [user_id], [ip_address], [user_agent], [payload], [last_activity]) VALUES (N'XYeKHNEbWixcOnjDNz5WHMGuZkzquCGJ6Obrxgeq', NULL, N'127.0.0.1', N'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/137.0.0.0 Safari/537.36', N'YTozOntzOjY6Il90b2tlbiI7czo0MDoiUTBJblFGa09MeDRBRUtnWGwzTTZCM0lxbGVxMHBCNkJiYUg3emJJTyI7czo5OiJfcHJldmlvdXMiO2E6MTp7czozOiJ1cmwiO3M6MzA6Imh0dHA6Ly9sb2NhbGhvc3Q6ODAwMC9wcm9kdWN0cyI7fXM6NjoiX2ZsYXNoIjthOjI6e3M6Mzoib2xkIjthOjA6e31zOjM6Im5ldyI7YTowOnt9fX0=', 1750367191)
+GO
+INSERT [dbo].[sessions] ([id], [user_id], [ip_address], [user_agent], [payload], [last_activity]) VALUES (N'Y1lyLseSp5L5I55nQ8rEWWXxa5kIKNWNKvpADru6', NULL, N'131.255.37.4', N'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/137.0.0.0 Safari/537.36', N'YToyOntzOjY6Il90b2tlbiI7czo0MDoid2dpSmJvYkZqMGdSRExSOFVsU3ZPNDNPMElja0hrQnVvQ3gzdndpNiI7czo2OiJfZmxhc2giO2E6Mjp7czozOiJvbGQiO2E6MDp7fXM6MzoibmV3IjthOjA6e319fQ==', 1750381144)
+GO
+INSERT [dbo].[sessions] ([id], [user_id], [ip_address], [user_agent], [payload], [last_activity]) VALUES (N'YESBSowLTb2qvD1e4T8lLP0T96Y0WsvIhF18xVdV', NULL, N'187.35.3.127', N'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/137.0.0.0 Safari/537.36', N'YTozOntzOjY6Il90b2tlbiI7czo0MDoiZDZ6czNuTXhITkkyS2s1QjBRbXF6Z0d3SnQyZGV3ZU5IVzFRTEFLOSI7czo5OiJfcHJldmlvdXMiO2E6MTp7czozOiJ1cmwiO3M6NjA6Imh0dHA6Ly9nYXVudGxldC5icmF6aWxzb3V0aC5jbG91ZGFwcC5henVyZS5jb206ODAwMC9wcm9kdWN0cyI7fXM6NjoiX2ZsYXNoIjthOjI6e3M6Mzoib2xkIjthOjA6e31zOjM6Im5ldyI7YTowOnt9fX0=', 1750375310)
+GO
+INSERT [dbo].[sessions] ([id], [user_id], [ip_address], [user_agent], [payload], [last_activity]) VALUES (N'yRW9CwPsQPlFlUzJc5ZuImSP0ThviaQjS61jlSEp', NULL, N'127.0.0.1', N'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/137.0.0.0 Safari/537.36', N'YTozOntzOjY6Il90b2tlbiI7czo0MDoic0FtdUxsQmU3bGJYWVdPN2x5RFMyNXFnanVvUVRySHp4VU5Fa2pIViI7czo5OiJfcHJldmlvdXMiO2E6MTp7czozOiJ1cmwiO3M6MzY6Imh0dHA6Ly9sb2NhbGhvc3Q6ODAwMC9wcm9kdWN0cy9zdG9jayI7fXM6NjoiX2ZsYXNoIjthOjI6e3M6Mzoib2xkIjthOjA6e31zOjM6Im5ldyI7YTowOnt9fX0=', 1750358827)
+GO
+SET ANSI_PADDING ON
+GO
+/****** Object:  Index [failed_jobs_uuid_unique]    Script Date: 20/06/2025 10:41:20 ******/
+CREATE UNIQUE NONCLUSTERED INDEX [failed_jobs_uuid_unique] ON [dbo].[failed_jobs]
+(
+	[uuid] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, SORT_IN_TEMPDB = OFF, IGNORE_DUP_KEY = OFF, DROP_EXISTING = OFF, ONLINE = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
+GO
+SET ANSI_PADDING ON
+GO
+/****** Object:  Index [jobs_queue_index]    Script Date: 20/06/2025 10:41:20 ******/
+CREATE NONCLUSTERED INDEX [jobs_queue_index] ON [dbo].[jobs]
+(
+	[queue] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, SORT_IN_TEMPDB = OFF, DROP_EXISTING = OFF, ONLINE = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
+GO
+/****** Object:  Index [sessions_last_activity_index]    Script Date: 20/06/2025 10:41:20 ******/
+CREATE NONCLUSTERED INDEX [sessions_last_activity_index] ON [dbo].[sessions]
+(
+	[last_activity] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, SORT_IN_TEMPDB = OFF, DROP_EXISTING = OFF, ONLINE = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
+GO
+/****** Object:  Index [sessions_user_id_index]    Script Date: 20/06/2025 10:41:20 ******/
+CREATE NONCLUSTERED INDEX [sessions_user_id_index] ON [dbo].[sessions]
+(
+	[user_id] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, SORT_IN_TEMPDB = OFF, DROP_EXISTING = OFF, ONLINE = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
+GO
+SET ANSI_PADDING ON
+GO
+/****** Object:  Index [users_email_unique]    Script Date: 20/06/2025 10:41:20 ******/
+CREATE UNIQUE NONCLUSTERED INDEX [users_email_unique] ON [dbo].[users]
+(
+	[email] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, SORT_IN_TEMPDB = OFF, IGNORE_DUP_KEY = OFF, DROP_EXISTING = OFF, ONLINE = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
+GO
+ALTER TABLE [dbo].[failed_jobs] ADD  DEFAULT (getdate()) FOR [failed_at]
+GO
+ALTER TABLE [dbo].[Orders]  WITH CHECK ADD FOREIGN KEY([customerId])
+REFERENCES [dbo].[Customers] ([id])
+GO
+ALTER TABLE [dbo].[OrdersProducts]  WITH CHECK ADD FOREIGN KEY([orderId])
+REFERENCES [dbo].[Orders] ([id])
+GO
+ALTER TABLE [dbo].[OrdersProducts]  WITH CHECK ADD FOREIGN KEY([productId])
+REFERENCES [dbo].[Products] ([id])
+GO
+USE [master]
+GO
+ALTER DATABASE [Supermarket] SET  READ_WRITE 
+GO
