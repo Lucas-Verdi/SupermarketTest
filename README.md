@@ -88,7 +88,7 @@ npm start
 ### 4. Acessando a Aplicação
 
 - **Local:** [http://localhost:3000/](http://localhost:3000/)
-- **Servidor:** [http://gauntlet.brazilsouth.cloudapp.azure.com:3000/](http://34.95.239.164:3000/)
+- **Servidor:** [http://34.95.239.164:3000/](http://34.95.239.164:3000/)
 
 ---
 
