@@ -7,7 +7,7 @@
 - **Frontend:** React (em `/supermarket-client`)
 - **Backend:** Laravel (em `/backend`)
 - **Banco de Dados:** SQL Server (hospedado remotamente)
-- **Hospedagem:** Azure VM ([Acesse aqui](http://gauntlet.brazilsouth.cloudapp.azure.com:3000/))
+- **Hospedagem:** Azure VM ([Acesse aqui](http://34.95.239.164:3000/))
 
 ---
 
@@ -88,7 +88,7 @@ npm start
 ### 4. Acessando a Aplicação
 
 - **Local:** [http://localhost:3000/](http://localhost:3000/)
-- **Servidor:** [http://gauntlet.brazilsouth.cloudapp.azure.com:3000/](http://gauntlet.brazilsouth.cloudapp.azure.com:3000/)
+- **Servidor:** [http://gauntlet.brazilsouth.cloudapp.azure.com:3000/](http://34.95.239.164:3000/)
 
 ---
 
