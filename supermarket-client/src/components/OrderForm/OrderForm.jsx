@@ -4,7 +4,7 @@ import TotalPrice from "./TotalPrice";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
-const API_URL = "http://localhost:8000";
+const API_URL = "http://35.199.115.159:8000";
 
 export default function OrderForm() {
   // Componente principal do formulário de pedidos

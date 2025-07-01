@@ -7,7 +7,7 @@
 - **Frontend:** React (em `/supermarket-client`)
 - **Backend:** Laravel (em `/backend`)
 - **Banco de Dados:** SQL Server (hospedado remotamente)
-- **Hospedagem:** Google Cloud VM ([Acesse aqui](http://34.95.239.164:3000/))
+- **Hospedagem:** Google Cloud VM ([Acesse aqui](http://35.199.115.159:3000/))
 
 ---
 
@@ -88,7 +88,7 @@ npm start
 ### 4. Acessando a Aplicação
 
 - **Local:** [http://localhost:3000/](http://localhost:3000/)
-- **Servidor:** [http://34.95.239.164:3000/](http://34.95.239.164:3000/)
+- **Servidor:** [http://35.199.115.159:3000/](http://35.199.115.159:3000/)
 
 ---
 
